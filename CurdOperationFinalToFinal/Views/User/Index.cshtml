@@ -1,0 +1,88 @@
+﻿@model List<CurdOperationFinalToFinal.Models.userData>
+    @{
+        ViewData["Title"] = "Employee Details";
+        var errorMessage = TempData["errorMessage"]?.ToString();
+        var successMessage = TempData["successMessage"]?.ToString();
+    }
+    <h3>@ViewData["Title"]?.ToString()</h3>
+    <hr />
+    @if (!string.IsNullOrWhiteSpace(@successMessage))
+    {
+        <div class="alert alert-success">
+            <b>Success: </b>@successMessage
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger">
+            <b>Error: </b>@errorMessage
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+    <div class="container p-3">
+        <div class="row pt-4">
+            <div class="col-6">
+                <h2 class="text-primary">Employee List</h2>
+            </div>
+            <div class="col-6 text-end">
+                <a asp-controller="User" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> &nbsp; Add New Employee
+                </a>
+            </div>
+        </div>
+        <br />
+
+
+
+        @if (Model.Count() > 0)
+        {
+            <table class="table table-bordered table-striped" id="userTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Date Of Birth</th>
+                        <th>Email</th>
+                        <th> Mobile Number</th>
+                        <th>Is Active</th>
+                        <th>Gender</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model)
+                    {
+                        <tr>
+                            <td width="5%">@obj.id</td>
+                            <td width="15%">@obj.firstName</td>
+                            <td width="15%">@obj.lastName</td>
+                            <td width="15%">@obj.dob.ToString("dd/MM/yyyy")</td>
+                            <td width="15%">@obj.Email</td>
+                            <td width="15%">@obj.phoneNumber</td>
+                            <td width="10%">@obj.isActive</td>
+                            <td width="10%">@obj.Gender</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="Employee" asp-action="Edit" asp-route-id="@obj.id"
+                                       class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i>Edit</a>
+                                    <a asp-controller="Employee" asp-action="Delete" asp-route-id="@obj.id"
+                                       class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i>Delete</a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        }
+        else
+        {
+            <p>No Employee available at this moment!</p>
+        }
+    </div>

@@ -1,0 +1,91 @@
+﻿@model CurdOperationFinalToFinal.Models.userData
+
+@{
+    ViewData["Title"] = "Create Employee";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+}
+<h3>@ViewData["Title"]?.ToString()</h3>
+<hr />
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">
+        <b>Error: </b>@errorMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<form class="row g-3" method="post">
+    @*<div class="col-md-12">
+        <label class="form-label">Name</label>
+    </div>*@
+  <div class="d-flex flex-row">
+
+    <div class="p-2">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" asp-for="firstName" placeholder="Enter First Name">
+    </div>
+    <div class="p-2">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" asp-for="lastName" placeholder="Enter Last Name">
+    </div>
+    
+    
+    <div class="p-2">
+        <label class="control-label"></label>
+        <label for="datepicker">Birth Date</label>
+        <input id="datepicker" type="date" class="form-control" asp-for="dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" />
+        <span class="text-danger"></span>
+    </div>
+  </div>
+    <div class="col-md-12">
+        <label class="form-label">Contact Details</label>
+    </div>
+   
+    <div class="col-md-6 form-floating">
+        <input type="text" class="form-control" id="phoneNumber" asp-for="phoneNumber" placeholder="Enter Contact Number">
+        <label for="phoneNumber">Contact Number</label>
+    </div>
+    <div class="col-md-6 form-floating">
+        <input type="text" class="form-control" id="phoneNumber" asp-for="Email" placeholder="Enter Contact Number">
+        <label for="phoneNumber">Email Address</label>
+    </div>
+    <div class="form-check">
+        <label class="form-check-label" for="flexCheckDefault">
+            Is Active?
+        </label>
+        <input class="form-check-input" type="checkbox" asp-for="isActive" value="" id="flexCheckDefault">
+    </div>
+    <div class="form-group col-md-8">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="1">
+            <label class="form-check-label" for="inlineRadio1">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="2">
+            <label class="form-check-label" for="inlineRadio2">Female</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="3">
+            <label class="form-check-label" for="inlineRadio3">Other</label>
+        </div>
+    </div>
+    @*@<div class="col-md-6">
+    <label class="form-label">Address Details</label>
+    </div>
+    <select class="form-select col-md-6" size="3" aria-label="size 3 select example">
+    <option selected>Address Type</option>
+    </select>
+    <div class="form-floating col-md-6">
+    <input type="text" class="form-control" id="Country" placeholder="Select Country" name="email">
+    <label for="email">Email</label>
+    </div>
+    <div class="col-md-6 form-floating">
+    <input type="text" class="form-control" id="phoneNumber" placeholder="Enter Contact Number">
+    <label for="phoneNumber">Contact Number</label>
+    </div>*@
+    <div class="">
+		<div class="">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+
+</form>
