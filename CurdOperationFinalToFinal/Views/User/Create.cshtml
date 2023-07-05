@@ -1,11 +1,11 @@
-﻿@model CurdOperationFinalToFinal.Models.userData
+﻿@model CurdOperationFinalToFinal.Models.UserVM.UserVM;
 
 @{
     ViewData["Title"] = "Create Employee";
     var errorMessage = TempData["errorMessage"]?.ToString();
 }
 <h3>@ViewData["Title"]?.ToString()</h3>
-<hr />
+<hr/>
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
@@ -21,53 +21,55 @@
 
     <div class="p-2">
         <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" asp-for="firstName" placeholder="Enter First Name">
+        <input type="text" class="form-control" id="firstName" asp-for="userData.firstName" placeholder="Enter First Name">
     </div>
     <div class="p-2">
         <label for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" asp-for="lastName" placeholder="Enter Last Name">
+        <input type="text" class="form-control" id="lastName" asp-for="userData.lastName" placeholder="Enter Last Name">
     </div>
     
     
     <div class="p-2">
         <label class="control-label"></label>
         <label for="datepicker">Birth Date</label>
-        <input id="datepicker" type="date" class="form-control" asp-for="dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" />
+        <input id="datepicker" type="date" class="form-control" asp-for="userData.dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" />
         <span class="text-danger"></span>
     </div>
-  </div>
-    <div class="col-md-12">
-        <label class="form-label">Contact Details</label>
-    </div>
    
-    <div class="col-md-6 form-floating">
-        <input type="text" class="form-control" id="phoneNumber" asp-for="phoneNumber" placeholder="Enter Contact Number">
+   
+    <div class="p-2">
         <label for="phoneNumber">Contact Number</label>
+        <input type="text" class="form-control" id="phoneNumber" asp-for="userData.phoneNumber" placeholder="Enter Contact Number" required maxlength="10">
     </div>
+  </div>
     <div class="col-md-6 form-floating">
-        <input type="text" class="form-control" id="phoneNumber" asp-for="Email" placeholder="Enter Contact Number">
+        <input type="text" class="form-control" id="phoneNumber" asp-for="userData.Email" placeholder="Enter Contact Number">
         <label for="phoneNumber">Email Address</label>
     </div>
     <div class="form-check">
         <label class="form-check-label" for="flexCheckDefault">
             Is Active?
         </label>
-        <input class="form-check-input" type="checkbox" asp-for="isActive" value="" id="flexCheckDefault">
+        <input class="form-check-input" type="checkbox" asp-for="userData.isActive" value="" id="flexCheckDefault">
     </div>
     <div class="form-group col-md-8">
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" asp-for="Gender" value="1">
+            <input class="form-check-input" type="radio" asp-for="userData.Gender" value="1">
             <label class="form-check-label" for="inlineRadio1">Male</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" asp-for="Gender" value="2">
+            <input class="form-check-input" type="radio" asp-for="userData.Gender" value="2">
             <label class="form-check-label" for="inlineRadio2">Female</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" asp-for="Gender" value="3">
+            <input class="form-check-input" type="radio" asp-for="userData.Gender" value="3">
             <label class="form-check-label" for="inlineRadio3">Other</label>
         </div>
     </div>
+    @*<select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))"></select>*@
+
+    <!-- State Dropdown -->
+    @*<select id="StateId" asp-for="Address.stateId"></select>*@
     @*@<div class="col-md-6">
     <label class="form-label">Address Details</label>
     </div>
@@ -87,5 +89,32 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
-
+    
 </form>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Country dropdown change event
+            $('#CountryId').change(function () {
+                var countryId = $(this).val();
+
+                // Make AJAX request to fetch states
+                $.ajax({
+                    url: '@Url.Action("GetStatesByCountry", "User")',
+                    type: 'GET',
+                    data: { countryId: countryId },
+                    success: function (result) {
+                        // Clear existing options
+                        $('#StateId').empty();
+
+                        // Add new options based on the retrieved states
+                        $.each(result, function (index, state) {
+                            debugger
+                            $('#StateId').append($('<option></option>').val(state.id).text(state.name));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,6 +1,9 @@
 ﻿using CurdOperationFinalToFinal.Models;
+using CurdOperationFinalToFinal.Models.UserVM;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics.Metrics;
 using System.Reflection;
 
 namespace CurdOperationFinalToFinal.DAl
@@ -50,57 +53,125 @@ namespace CurdOperationFinalToFinal.DAl
             return userFinal;
         }
 
-        public bool Insert(userData model)
+            public bool Insert(UserVM model)
+		    {
+			    int id = 0;
+			    using (con = new SqlConnection(GetConnectionString()))
+			    {
+				    cmd = con.CreateCommand();
+				    cmd.CommandType = CommandType.StoredProcedure;
+				    cmd.CommandText = "new_sp_write";
+				    cmd.Parameters.AddWithValue("@firstname", model.userData.firstName);
+				    cmd.Parameters.AddWithValue("@lastname", model.userData.lastName);
+				    cmd.Parameters.AddWithValue("@dob", model.userData.dob.Date);
+				    cmd.Parameters.AddWithValue("@phonenumber", model.userData.phoneNumber);
+				    cmd.Parameters.AddWithValue("@isActive", model.userData.isActive);
+				    cmd.Parameters.AddWithValue("@email", model.userData.Email);
+                    cmd.Parameters.AddWithValue("genderId", model.userData.Gender);
+				    con.Open();
+
+				    id = cmd.ExecuteNonQuery();
+				    con.Close();
+			    }
+			    return id > 0 ? true : false;
+		    }
+
+		//public List<gender> GetCombinedData()
+		//{
+		//    List<gender> combinedData = new List<gender>();
+
+		//    {
+		//        con.Open();
+
+		//        string query = "SELECT id, name FROM gender";
+		//        SqlCommand cmd = new SqlCommand(query, con);
+
+		//        using (SqlDataReader reader = cmd.ExecuteReader())
+		//        {
+		//            while (reader.Read())
+		//            {
+		//                string id = reader["id"].ToString();
+		//                string name = reader["name"].ToString();
+
+
+		//            }
+		//        }
+		//    }
+
+		//    // Add predefined data
+
+		//    return combinedData;
+		//}
+
+
+		//this function for country dropdown 
+
+		public List<country> GetCountries()
 		{
-			int id = 0;
+			List<country> countries = new List<country>();
+
 			using (con = new SqlConnection(GetConnectionString()))
 			{
-				cmd = con.CreateCommand();
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.CommandText = "new_sp_write";
-				cmd.Parameters.AddWithValue("@firstname", model.firstName);
-				cmd.Parameters.AddWithValue("@lastname", model.lastName);
-				cmd.Parameters.AddWithValue("@dob", model.dob);
-				cmd.Parameters.AddWithValue("@phonenumber", model.phoneNumber);
-				cmd.Parameters.AddWithValue("@isActive", model.isActive);
-				cmd.Parameters.AddWithValue("@email", model.Email);
-                cmd.Parameters.AddWithValue("genderId", model.Gender);
+				string query = "SELECT id, [name] FROM Country";
+				SqlCommand command = new SqlCommand(query, con);
+
 				con.Open();
 
-				id = cmd.ExecuteNonQuery();
-				con.Close();
+				using (SqlDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						country country = new country
+						{
+							id = reader.GetInt32(0),
+							name = reader.GetString(1)
+						};
+
+						countries.Add(country);
+					}
+				}
 			}
-			return id > 0 ? true : false;
+
+			return countries;
 		}
 
-        //public List<gender> GetCombinedData()
-        //{
-        //    List<gender> combinedData = new List<gender>();
+		//this function for state display using country id
+		public List<state> GetStatesByCountry(int countryId)
+		{
+			List<state> states = new List<state>();
 
-        //    {
-        //        con.Open();
+			using (con = new SqlConnection(GetConnectionString()))
+			{
+				string query = "SELECT Id, Name FROM State WHERE CountryId = @CountryId";
+				SqlCommand command = new SqlCommand(query, con);
+				command.Parameters.AddWithValue("@CountryId", countryId);
 
-        //        string query = "SELECT id, name FROM gender";
-        //        SqlCommand cmd = new SqlCommand(query, con);
+				con.Open();
 
-        //        using (SqlDataReader reader = cmd.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                string id = reader["id"].ToString();
-        //                string name = reader["name"].ToString();
+				using (SqlDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						state state = new state
+						{
+							id = reader.GetInt32(0),
+							name = reader.GetString(1)
+						};
 
-                        
-        //            }
-        //        }
-        //    }
+						states.Add(state);
+					}
+				}
+			}
 
-        //    // Add predefined data
-            
-        //    return combinedData;
-        //}
+			return states;
+		}
 
 
 
-    }
+
+
+
+
+
+	}
 }

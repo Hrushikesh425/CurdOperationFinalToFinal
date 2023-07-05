@@ -1,6 +1,8 @@
 ﻿using CurdOperationFinalToFinal.DAl;
 using CurdOperationFinalToFinal.Models;
+using CurdOperationFinalToFinal.Models.UserVM;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 using System.Reflection;
 
 namespace CurdOperationFinalToFinal.Controllers
@@ -25,16 +27,32 @@ namespace CurdOperationFinalToFinal.Controllers
             }
             return View(employees);
         }
+		public IActionResult GetStatesByCountry(int countryId)
+		{
+			List<state> states = _dal.GetStatesByCountry(countryId);
+			return Json(states);
+		}
 
-        [HttpGet]
+		[HttpGet]
 		public IActionResult Create()
 		{
-			return View();
+			//List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
+			List<country> countries = _dal.GetCountries();
+
+			UserVM userVm = new UserVM
+			{
+				userData = new userData(),
+				Address = new userAddress(),
+				
+		        countries = countries,
+			};
+
+			return View(userVm); ;
 		}
-        private gender model = new gender();
+		private gender model = new gender();
 
         [HttpPost]
-		public IActionResult Create(userData data)
+		public IActionResult Create(UserVM data)
 		{
 			if(!ModelState.IsValid)
 			{
