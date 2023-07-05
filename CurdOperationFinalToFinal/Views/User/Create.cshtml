@@ -66,10 +66,10 @@
             <label class="form-check-label" for="inlineRadio3">Other</label>
         </div>
     </div>
-    @*<select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))"></select>*@
+    <select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))"></select>
 
     <!-- State Dropdown -->
-    @*<select id="StateId" asp-for="Address.stateId"></select>*@
+    <select id="StateId" asp-for="Address.stateId"></select>
     @*@<div class="col-md-6">
     <label class="form-label">Address Details</label>
     </div>
