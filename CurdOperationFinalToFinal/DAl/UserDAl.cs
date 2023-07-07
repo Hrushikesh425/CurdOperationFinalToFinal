@@ -221,7 +221,21 @@ namespace CurdOperationFinalToFinal.DAl
             }
             return id > 0 ? true : false;
         }
-
+		public bool Delete(int id)
+		{
+            int i = 0;
+			using(con = new SqlConnection(GetConnectionString()))
+			{
+				cmd = con.CreateCommand();
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.CommandText= "[dbo].[sp_delete_user]";
+				cmd.Parameters.AddWithValue("@id", id);
+				con.Open();
+				i = cmd.ExecuteNonQuery();
+				con.Close();
+			}
+			return i>0 ? true: false;
+		}
 
 
 
