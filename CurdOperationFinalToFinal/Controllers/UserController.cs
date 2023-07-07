@@ -67,5 +67,61 @@ namespace CurdOperationFinalToFinal.Controllers
 			TempData["successMessage"] = "Employe Details Saved";
 			return RedirectToAction("Index");
 		}
-	}
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+            {
+            userData user = new userData();
+            try
+            {
+                
+                 user = _dal.GetById(id);
+;
+                if (user.id == 0)
+                {
+                    TempData["errorMessage"] = $"User details not found with Id: {id}";
+                    return RedirectToAction("Index");
+                }
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+
+                TempData["errorMessage"] = ex.Message;
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(userData data)
+        {
+            try
+            {
+                bool result = _dal.Update(data);
+                if (!ModelState.IsValid)
+                {
+                    TempData["errorMessage"] = "Model Data is InValid";
+                    return View();
+                }
+
+                if (!result)
+                {
+                    TempData["errorMessage"] = "Unable to update the data";
+                    return View();
+                }
+                TempData["sucessMessage"] = "Employee details Updated";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                TempData["errorMessage"] = ex.Message;
+                return View();
+            }
+        }
+
+
+
+
+    }
 }

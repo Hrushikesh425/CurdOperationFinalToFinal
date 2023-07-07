@@ -11,8 +11,8 @@ namespace CurdOperationFinalToFinal.Models
         public string  firstName { get; set; }
 		[Required]
         public string  lastName { get; set; }
-        [Required]
-        public string  city { get; set; }
+        //[Required]
+        //public string  city { get; set; }
         public DateTime dob { get; set; }
         public string Gender { get; set; }
         //gender id foreign key 
@@ -24,13 +24,13 @@ namespace CurdOperationFinalToFinal.Models
         public string phoneNumber { get; set; }
         public string  Email { get; set; }
 		public bool isActive { get; set; } = true;
-        public bool isDelete { get; set; }
+        //public bool isDelete { get; set; }
 
 		//gender id foreign key 
-		[Display(Name = "userAddress")]
-		public virtual int userAddressId { get; set; }
-		[ForeignKey("id")]
-		public virtual userAddress userAddress { get; set; }
+		//[Display(Name = "userAddress")]
+		//public virtual int userAddressId { get; set; }
+		//[ForeignKey("id")]
+		//public virtual userAddress userAddress { get; set; }
 		//ending of foreign key 
 	}
 }

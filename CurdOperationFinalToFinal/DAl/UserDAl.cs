@@ -166,12 +166,65 @@ namespace CurdOperationFinalToFinal.DAl
 			return states;
 		}
 
+        public userData GetById(int id)
+        {
+            userData userFinal = new userData();
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "[dbo].[sp_get_userbyid]";
+				cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+
+                while (dr.Read())
+                {
+                    
+                    userFinal.id = Convert.ToInt32(dr["id"]);
+                    userFinal.firstName = dr["firstName"].ToString();
+                    userFinal.lastName = dr["lastName"].ToString();
+                    userFinal.dob = Convert.ToDateTime(dr["dob"]).Date;
+                    userFinal.phoneNumber = dr["phoneNumber"].ToString();
+                    userFinal.Email = dr["Email"].ToString();
+                    userFinal.isActive = Convert.ToBoolean(dr["isActive"]);
+                    userFinal.Gender = dr["genderId"].ToString();
+
+                    
+                }
+                con.Close();
+
+            }
+            return userFinal;
+        }
+        public bool Update(userData  model)
+        {
+            int id = 0;
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "[dbo].[sp_update_user]";
+                cmd.Parameters.AddWithValue("@id", model.id);
+                cmd.Parameters.AddWithValue("@firstname", model.firstName);
+                cmd.Parameters.AddWithValue("@lastname", model.lastName);
+                cmd.Parameters.AddWithValue("@dob", model.dob.Date);
+                cmd.Parameters.AddWithValue("@phonenumber", model.phoneNumber);
+                cmd.Parameters.AddWithValue("@isActive", model.isActive);
+                cmd.Parameters.AddWithValue("@email", model.Email);
+                cmd.Parameters.AddWithValue("genderId", model.Gender);
+                con.Open();
+
+                id = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            return id > 0 ? true : false;
+        }
 
 
 
 
 
-
-
-	}
+    }
 }

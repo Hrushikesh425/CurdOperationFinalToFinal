@@ -1,18 +1,18 @@
-﻿@model CurdOperationFinalToFinal.Models.UserVM.UserVM;
+﻿@model CurdOperationFinalToFinal.Models.userData;
 
-@{
+@*@{
     ViewData["Title"] = "Create User";
     var errorMessage = TempData["errorMessage"]?.ToString();
 }
-<h3>@ViewData["Title"]?.ToString()</h3>
+<h3>@ViewData["Title"]?.ToString()</h3>*@
 <link href="~/css/form.css" rel="stylesheet" />
-@if (!string.IsNullOrWhiteSpace(errorMessage))
+@*@if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
         <b>Error: </b>@errorMessage
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-}
+}*@
 <div class="box">
     <form class="row g-3" method="post">
         
@@ -20,76 +20,79 @@
         <label class="form-label">Name</label>
         </div>*@
         <div class="d-flex flex-row">
-
+            <div class="p-2">
+                <label for="id">id</label>
+                <input type="text" class="" id="firstName" asp-for="id" required>
+            </div>
             <div class="p-2">
                 <label for="firstName">First Name</label>
-                <input type="text" class="" id="firstName" asp-for="userData.firstName" required >
+                <input type="text" class="" id="firstName" asp-for="firstName" required>
             </div>
             <div class="p-2">
                 <label for="lastName">Last Name</label>
-                <input type="text" class="" id="lastName" asp-for="userData.lastName"  required>
+                <input type="text" class="" id="lastName" asp-for="lastName" required>
             </div>
 
 
             <div class="p-2">
                 <label class="control-label"></label>
                 <label for="datepicker">Birth Date</label>
-                <input id="datepicker" type="date" class="" asp-for="userData.dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" required />
+                <input id="datepicker" type="date" class="" asp-for="dob"  required />
                 <span class="text-danger"></span>
             </div>
 
 
             <div class="p-2">
                 <label for="phoneNumber">Contact Number</label>
-                <input type="text" class="" id="phoneNumber" asp-for="userData.phoneNumber"  required maxlength="10">
+                <input type="text" class="" id="phoneNumber" asp-for="phoneNumber" required maxlength="10">
             </div>
         </div>
-      <div class="d-flex flex-row">
+        <div class="d-flex flex-row">
 
-        <div class="p-2">
-            <label for="phoneNumber">Email Address</label><br />
-            <input type="text" class="" id="Email" asp-for="userData.Email" required >
-        </div>
-        <div class="p-2" style="margin-top:30px;margin-left:8px;">
-            <label class=""  for="flexCheckDefault">
-                Is Active?
-            </label>
-            <input class="form-check-input" type="checkbox" asp-for="userData.isActive" value="" id="flexCheckDefault" >
-        </div>
-       <div style="margin-top:30px;margin-left:8px;" class="d-flex flex-row">
-
-         <label style="margin-top:8px">
-             Gender
-         </label> 
-        <div class="p-2">
-                <input class="form-check-input" type="radio" asp-for="userData.Gender" value="1" required>
-                <label class="form-check-label" for="inlineRadio1">Male</label>
-        </div>
-        <div class="p-2">
-                <input class="form-check-input" type="radio" asp-for="userData.Gender" value="2" required>
-                <label class="form-check-label" for="inlineRadio2">Female</label>
-        </div>
-        <div class="p-2">
-                <input class="form-check-input" type="radio" asp-for="userData.Gender" value="3" required>
-                <label class="form-check-label" for="inlineRadio3">Other</label>
-        </div>
-       </div>
+            <div class="p-2">
+                <label for="phoneNumber">Email Address</label><br />
+                <input type="text" class="" id="Email" asp-for="Email" required>
+            </div>
             <div class="p-2" style="margin-top:30px;margin-left:8px;">
-        <label>Country</label>
-        <select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
-       </div>
-      </div>
-        
-       
+                <label class="" for="flexCheckDefault">
+                    Is Active?
+                </label>
+                <input class="form-check-input" type="checkbox" asp-for="isActive" value="" id="flexCheckDefault">
+            </div>
+            <div style="margin-top:30px;margin-left:8px;" class="d-flex flex-row">
+
+                <label style="margin-top:8px">
+                    Gender
+                </label>
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="1" required>
+                    <label class="form-check-label" for="inlineRadio1">Male</label>
+                </div>
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="2" required>
+                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                </div>
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="3" required>
+                    <label class="form-check-label" for="inlineRadio3">Other</label>
+                </div>
+            </div>
+            @*<div class="p-2" style="margin-top:30px;margin-left:8px;">
+                <label>Country</label>
+                <select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+            </div>*@
+        </div>
+
+
 
         <!-- State Dropdown -->
-        <div class="d-flex flex-row">
-        <div class="p-2">
+        @*<div class="d-flex flex-row">
+            <div class="p-2">
 
-        <label>State</label>
-        <select id="StateId" asp-for="Address.stateId" style="width:100px"></select>
-        </div>
-        </div>
+                <label>State</label>
+                <select id="StateId" asp-for="Address.stateId" style="width:100px"></select>
+            </div>
+        </div>*@
         @*@<div class="col-md-6">
         <label class="form-label">Address Details</label>
         </div>
