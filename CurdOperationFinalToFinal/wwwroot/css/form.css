@@ -8,7 +8,7 @@
 .box {
     margin-top:20px;
     margin-left:50px
-    width: 800px;
+    width: auto;
     align-items:center;
     background: rgba(0,0,0,.5);
     box-sizing: border-box;

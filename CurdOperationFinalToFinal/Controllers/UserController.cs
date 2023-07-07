@@ -168,6 +168,24 @@ namespace CurdOperationFinalToFinal.Controllers
         }
 
 
+        public IActionResult AddAddressRow()
+        {
+            //List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
+            List<country> countries = _dal.GetCountries();
+
+            UserVM employeeVM = new UserVM
+            {
+                userData = new userData(),
+                Address = new userAddress(),
+                
+                countries = countries,
+            };
+
+            return PartialView("_AddressTableRow", employeeVM);
+        }
+
+
+
 
 
     }
