@@ -32,5 +32,6 @@ namespace CurdOperationFinalToFinal.Models
 		//[ForeignKey("id")]
 		//public virtual userAddress userAddress { get; set; }
 		//ending of foreign key 
+        public List<userAddress> addresses { get; set; }
 	}
 }
