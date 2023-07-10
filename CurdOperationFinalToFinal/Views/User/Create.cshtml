@@ -22,26 +22,31 @@
         <div class="d-flex flex-row">
             <div class="p-2">
                 @Html.LabelFor(model => model.userData.firstName, "First Name")
-                @Html.TextBoxFor(model => model.userData.firstName, new { @class = "form-control", required = "required" })
+                <br/>
+                @Html.TextBoxFor(model => model.userData.firstName, new { @class = "input", required = "required" })
             </div>
             <div class="p-2">
                 @Html.LabelFor(model => model.userData.lastName, "Last Name")
-                @Html.TextBoxFor(model => model.userData.lastName, new { @class = "form-control", required = "required" })
+                <br/>
+                @Html.TextBoxFor(model => model.userData.lastName, new { @class ="input", required = "required" })
             </div>
             <div class="p-2">
                 @Html.LabelFor(model => model.userData.dob, "Birth Date")
-                @Html.TextBoxFor(model => model.userData.dob, new { @class = "form-control", type = "date", required = "required" })
+                <br/>
+                @Html.TextBoxFor(model => model.userData.dob, new { @class = "input", type = "date", required = "required" })
                 <span class="text-danger"></span>
             </div>
             <div class="p-2">
                 @Html.LabelFor(model => model.userData.phoneNumber, "Contact Number")
-                @Html.TextBoxFor(model => model.userData.phoneNumber, new { @class = "form-control", required = "required", maxlength = "10" })
+                <br/>
+                @Html.TextBoxFor(model => model.userData.phoneNumber, new { @class = "input", required = "required", maxlength = "10" })
             </div>
         </div>
         <div class="d-flex flex-row">
             <div class="p-2">
                 @Html.LabelFor(model => model.userData.Email, "Email Address")
-                @Html.TextBoxFor(model => model.userData.Email, new { @class = "form-control", required = "required" })
+                <br/>
+                @Html.TextBoxFor(model => model.userData.Email, new { @class = "input", required = "required" })
             </div>
             <div class="p-2" style="margin-top: 10px; margin-left: 38px;">
                 @Html.LabelFor(model => model.userData.isActive, "Is Active?")
@@ -87,7 +92,7 @@
     </div>
 
 
-    <button type="submit" id="add-row" class="">Add</button>
+    <input type="submit" id="add-row" class="" style="width"/ value="Add">
 }
 
 @section Scripts{

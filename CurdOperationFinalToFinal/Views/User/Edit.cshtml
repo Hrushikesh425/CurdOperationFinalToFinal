@@ -1,10 +1,11 @@
 ﻿@model CurdOperationFinalToFinal.Models.userData;
 
-@*@{
-    ViewData["Title"] = "Create User";
+@{
+    ViewData["Title"] = "Edit User";
     var errorMessage = TempData["errorMessage"]?.ToString();
 }
-<h3>@ViewData["Title"]?.ToString()</h3>*@
+<h3 style="margin-top:30px">@ViewData["Title"]?.ToString()</h3>
+<hr />
 <link href="~/css/form.css" rel="stylesheet" />
 @*@if (!string.IsNullOrWhiteSpace(errorMessage))
 {
@@ -13,7 +14,7 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }*@
-<div class="box">
+<div class="box" style="margin-top:70px">
     <form class="row g-3" method="post">
         
         @*<div class="col-md-12">
