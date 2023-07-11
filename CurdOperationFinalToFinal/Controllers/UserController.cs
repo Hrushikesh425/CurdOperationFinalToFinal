@@ -70,27 +70,33 @@ namespace CurdOperationFinalToFinal.Controllers
 
         [HttpGet]
         public IActionResult Edit(int id)
+        {
+            List<country> countries = _dal.GetCountries();
+            UserVM employee = new UserVM()
             {
-            userData user = new userData();
+                AddressList = new List<userAddress>(),
+                
+                countries = countries
+            };
             try
             {
-                
-                 user = _dal.GetById(id);
-;
-                if (user.id == 0)
+                employee = _dal.GetById(id);
+
+                if (employee.userData.id == null)
                 {
                     TempData["errorMessage"] = $"User details not found with Id: {id}";
                     return RedirectToAction("Index");
                 }
-                return View(user);
+
+                return View(employee);
             }
             catch (Exception ex)
             {
-
                 TempData["errorMessage"] = ex.Message;
                 return View();
             }
         }
+
 
         [HttpPost]
         public IActionResult Edit(userData data)
@@ -122,18 +128,18 @@ namespace CurdOperationFinalToFinal.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            userData user = new userData();
+           
             try
             {
 
-                user = _dal.GetById(id);
-                ;
-                if (user.id == 0)
+                UserVM userViewModel = _dal.GetById(id);
+
+                if (userViewModel.userData.id == 0)
                 {
                     TempData["errorMessage"] = $"User details not found with Id: {id}";
                     return RedirectToAction("Index");
                 }
-                return View(user);
+                return View(userViewModel);
             }
             catch (Exception ex)
             {

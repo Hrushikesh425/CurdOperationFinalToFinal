@@ -10,19 +10,19 @@ using System.Windows.Input;
 
 namespace CurdOperationFinalToFinal.DAl
 {
-	public class UserDAl
-	{
-		SqlConnection con = null;
-		SqlCommand cmd = null;
+    public class UserDAl
+    {
+        SqlConnection con = null;
+        SqlCommand cmd = null;
 
-		public static IConfiguration configuration { get; set; }
+        public static IConfiguration configuration { get; set; }
 
-		private string GetConnectionString()
-		{
-			var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-			configuration = builder.Build();
-			return configuration.GetConnectionString("DefaultString");
-		}
+        private string GetConnectionString()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            configuration = builder.Build();
+            return configuration.GetConnectionString("DefaultString");
+        }
         public List<userData> GetAll()
         {
             List<userData> userFinal = new List<userData>();
@@ -41,12 +41,12 @@ namespace CurdOperationFinalToFinal.DAl
                     userList.id = Convert.ToInt32(dr["id"]);
                     userList.firstName = dr["firstName"].ToString();
                     userList.lastName = dr["lastName"].ToString();
-					userList.dob = Convert.ToDateTime(dr["dob"]).Date;
+                    userList.dob = Convert.ToDateTime(dr["dob"]).Date;
                     userList.phoneNumber = dr["phoneNumber"].ToString();
-					userList.Email = dr["Email"].ToString();
-					userList.isActive = Convert.ToBoolean(dr["isActive"]);
+                    userList.Email = dr["Email"].ToString();
+                    userList.isActive = Convert.ToBoolean(dr["isActive"]);
                     userList.Gender = dr["Gender"].ToString();
-                    
+
                     userFinal.Add(userList);
                 }
                 con.Close();
@@ -55,7 +55,7 @@ namespace CurdOperationFinalToFinal.DAl
             return userFinal;
         }
 
-        public bool Insert(UserVM model,List<userAddress> Address)
+        public bool Insert(UserVM model, List<userAddress> Address)
         {
             string addressListJson = JsonConvert.SerializeObject(Address);
             int id = 0;
@@ -116,98 +116,120 @@ namespace CurdOperationFinalToFinal.DAl
         //this function for country dropdown 
 
         public List<country> GetCountries()
-		{
-			List<country> countries = new List<country>();
-
-			using (con = new SqlConnection(GetConnectionString()))
-			{
-				string query = "SELECT id, [name] FROM Country";
-				SqlCommand command = new SqlCommand(query, con);
-
-				con.Open();
-
-				using (SqlDataReader reader = command.ExecuteReader())
-				{
-					while (reader.Read())
-					{
-						country country = new country
-						{
-							id = reader.GetInt32(0),
-							name = reader.GetString(1)
-						};
-
-						countries.Add(country);
-					}
-				}
-			}
-
-			return countries;
-		}
-
-		//this function for state display using country id
-		public List<state> GetStatesByCountry(int countryId)
-		{
-			List<state> states = new List<state>();
-
-			using (con = new SqlConnection(GetConnectionString()))
-			{
-				string query = "SELECT Id, Name FROM State WHERE CountryId = @CountryId";
-				SqlCommand command = new SqlCommand(query, con);
-				command.Parameters.AddWithValue("@CountryId", countryId);
-
-				con.Open();
-
-				using (SqlDataReader reader = command.ExecuteReader())
-				{
-					while (reader.Read())
-					{
-						state state = new state
-						{
-							id = reader.GetInt32(0),
-							name = reader.GetString(1)
-						};
-
-						states.Add(state);
-					}
-				}
-			}
-
-			return states;
-		}
-
-        public userData GetById(int id)
         {
-            userData userFinal = new userData();
+            List<country> countries = new List<country>();
+
             using (con = new SqlConnection(GetConnectionString()))
             {
-                cmd = con.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "[dbo].[sp_get_userbyid]";
-				cmd.Parameters.AddWithValue("@id", id);
+                string query = "SELECT id, [name] FROM Country";
+                SqlCommand command = new SqlCommand(query, con);
+
                 con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
 
-
-                while (dr.Read())
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    
-                    userFinal.id = Convert.ToInt32(dr["id"]);
-                    userFinal.firstName = dr["firstName"].ToString();
-                    userFinal.lastName = dr["lastName"].ToString();
-                    userFinal.dob = Convert.ToDateTime(dr["dob"]).Date;
-                    userFinal.phoneNumber = dr["phoneNumber"].ToString();
-                    userFinal.Email = dr["Email"].ToString();
-                    userFinal.isActive = Convert.ToBoolean(dr["isActive"]);
-                    userFinal.Gender = dr["genderId"].ToString();
+                    while (reader.Read())
+                    {
+                        country country = new country
+                        {
+                            id = reader.GetInt32(0),
+                            name = reader.GetString(1)
+                        };
 
-                    
+                        countries.Add(country);
+                    }
                 }
-                con.Close();
-
             }
-            return userFinal;
+
+            return countries;
         }
-        public bool Update(userData  model)
+
+        //this function for state display using country id
+        public List<state> GetStatesByCountry(int countryId)
+        {
+            List<state> states = new List<state>();
+
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                string query = "SELECT Id, Name FROM State WHERE CountryId = @CountryId";
+                SqlCommand command = new SqlCommand(query, con);
+                command.Parameters.AddWithValue("@CountryId", countryId);
+
+                con.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        state state = new state
+                        {
+                            id = reader.GetInt32(0),
+                            name = reader.GetString(1)
+                        };
+
+                        states.Add(state);
+                    }
+                }
+            }
+
+            return states;
+        }
+
+        public UserVM GetById(int id)
+        {
+            try
+            {
+                UserVM employee = new UserVM()
+                {
+                    userData = new userData(),
+                    AddressList = new List<userAddress>()
+                };
+
+                using (con = new SqlConnection(GetConnectionString()))
+                {
+                    userAddress address = new userAddress();
+                    cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "[dbo].[spGet_AllDetailsById]";
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        
+                        employee.userData.id = Convert.ToInt32(dr["id"]);
+                        employee.userData.firstName = Convert.ToString(dr["firstName"]);
+                        employee.userData.lastName = Convert.ToString(dr["lastName"]);
+                        employee.userData.Gender = Convert.ToString(dr["GenderId"]);
+                        employee.userData.dob = Convert.ToDateTime(dr["dob"]).Date;
+                        employee.userData.Email = Convert.ToString(dr["Email"]);
+                        employee.userData.phoneNumber = Convert.ToString(dr["phoneNumber"]);
+                        employee.userData.isActive = Convert.ToBoolean(dr["isActive"]);
+
+
+                        address.countryId = Convert.ToInt32(dr["CountryId"]);
+                        address.stateId = Convert.ToInt32(dr["StateId"]);
+                        address.address = Convert.ToString(dr["address"]);
+                        address.city = Convert.ToString(dr["City"]);
+
+
+                        // Add the address to the address list
+                        employee.AddressList.Add(address);
+                    }
+                    con.Close();
+                    return employee;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        public bool Update(userData model)
         {
             int id = 0;
             using (con = new SqlConnection(GetConnectionString()))
@@ -230,21 +252,21 @@ namespace CurdOperationFinalToFinal.DAl
             }
             return id > 0 ? true : false;
         }
-		public bool Delete(int id)
-		{
+        public bool Delete(int id)
+        {
             int i = 0;
-			using(con = new SqlConnection(GetConnectionString()))
-			{
-				cmd = con.CreateCommand();
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.CommandText= "[dbo].[sp_delete_user]";
-				cmd.Parameters.AddWithValue("@id", id);
-				con.Open();
-				i = cmd.ExecuteNonQuery();
-				con.Close();
-			}
-			return i>0 ? true: false;
-		}
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "[dbo].[sp_delete_user]";
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                i = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            return i > 0 ? true : false;
+        }
 
 
 

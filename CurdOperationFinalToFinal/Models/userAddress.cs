@@ -24,6 +24,8 @@ namespace CurdOperationFinalToFinal.Models
         public List<country> countries { get; set; }
         public List<state> States { get; set; }
 
+		public List<userAddress> Addresses { get; set; }
+
 
 
 
