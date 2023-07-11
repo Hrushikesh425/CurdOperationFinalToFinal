@@ -52,13 +52,13 @@ namespace CurdOperationFinalToFinal.Controllers
 		private gender model = new gender();
 
         [HttpPost]
-		public IActionResult Create(UserVM data)
+		public IActionResult Create(UserVM data, List<userAddress> Address)
 		{
-			if(!ModelState.IsValid)
-			{
-				TempData["errorMessage"] = "model data is not valid ";
-			}
-			bool result = _dal.Insert(data);
+			//if(!ModelState.IsValid)
+			//{
+			//	TempData["errorMessage"] = "model data is not valid ";
+			//}
+			bool result = _dal.Insert(data,Address);
 			if(!result)
 			{
 				TempData["errorMessage"] = "unable to save the data";
@@ -173,10 +173,9 @@ namespace CurdOperationFinalToFinal.Controllers
             //List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
             List<country> countries = _dal.GetCountries();
 
-            UserVM employeeVM = new UserVM
+            userAddress employeeVM = new userAddress
             {
-                userData = new userData(),
-                Address = new userAddress(),
+                
                 
                 countries = countries,
             };

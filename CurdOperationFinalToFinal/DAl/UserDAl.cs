@@ -1,10 +1,12 @@
 ﻿using CurdOperationFinalToFinal.Models;
 using CurdOperationFinalToFinal.Models.UserVM;
+using Newtonsoft.Json;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics.Metrics;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace CurdOperationFinalToFinal.DAl
 {
@@ -53,60 +55,67 @@ namespace CurdOperationFinalToFinal.DAl
             return userFinal;
         }
 
-            public bool Insert(UserVM model)
-		    {
-			    int id = 0;
-			    using (con = new SqlConnection(GetConnectionString()))
-			    {
-				    cmd = con.CreateCommand();
-				    cmd.CommandType = CommandType.StoredProcedure;
-				    cmd.CommandText = "new_sp_write";
-				    cmd.Parameters.AddWithValue("@firstname", model.userData.firstName);
-				    cmd.Parameters.AddWithValue("@lastname", model.userData.lastName);
-				    cmd.Parameters.AddWithValue("@dob", model.userData.dob.Date);
-				    cmd.Parameters.AddWithValue("@phonenumber", model.userData.phoneNumber);
-				    cmd.Parameters.AddWithValue("@isActive", model.userData.isActive);
-				    cmd.Parameters.AddWithValue("@email", model.userData.Email);
-                    cmd.Parameters.AddWithValue("genderId", model.userData.Gender);
-				    con.Open();
+        public bool Insert(UserVM model,List<userAddress> Address)
+        {
+            string addressListJson = JsonConvert.SerializeObject(Address);
+            int id = 0;
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "[dbo].[SaveEmployee]";
+                cmd.Parameters.AddWithValue("@firstname", model.userData.firstName);
+                cmd.Parameters.AddWithValue("@lastname", model.userData.lastName);
+                cmd.Parameters.AddWithValue("@dob", model.userData.dob.Date);
+                cmd.Parameters.AddWithValue("@phonenumber", model.userData.phoneNumber);
+                cmd.Parameters.AddWithValue("@isActive", model.userData.isActive);
+                cmd.Parameters.AddWithValue("@email", model.userData.Email);
+                cmd.Parameters.AddWithValue("genderId", model.userData.Gender);
+                cmd.Parameters.AddWithValue("@AddressList", addressListJson);
 
-				    id = cmd.ExecuteNonQuery();
-				    con.Close();
-			    }
-			    return id > 0 ? true : false;
-		    }
+                // Set the SQLDbType to NVarChar for the @AddressList parameter
+                cmd.Parameters["@AddressList"].SqlDbType = SqlDbType.NVarChar;
+                cmd.Parameters["@AddressList"].Size = -1;
+                con.Open();
 
-		//public List<gender> GetCombinedData()
-		//{
-		//    List<gender> combinedData = new List<gender>();
-
-		//    {
-		//        con.Open();
-
-		//        string query = "SELECT id, name FROM gender";
-		//        SqlCommand cmd = new SqlCommand(query, con);
-
-		//        using (SqlDataReader reader = cmd.ExecuteReader())
-		//        {
-		//            while (reader.Read())
-		//            {
-		//                string id = reader["id"].ToString();
-		//                string name = reader["name"].ToString();
+                id = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            return id > 0 ? true : false;
+        }
 
 
-		//            }
-		//        }
-		//    }
+        //public List<gender> GetCombinedData()
+        //{
+        //    List<gender> combinedData = new List<gender>();
 
-		//    // Add predefined data
+        //    {
+        //        con.Open();
 
-		//    return combinedData;
-		//}
+        //        string query = "SELECT id, name FROM gender";
+        //        SqlCommand cmd = new SqlCommand(query, con);
+
+        //        using (SqlDataReader reader = cmd.ExecuteReader())
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                string id = reader["id"].ToString();
+        //                string name = reader["name"].ToString();
 
 
-		//this function for country dropdown 
+        //            }
+        //        }
+        //    }
 
-		public List<country> GetCountries()
+        //    // Add predefined data
+
+        //    return combinedData;
+        //}
+
+
+        //this function for country dropdown 
+
+        public List<country> GetCountries()
 		{
 			List<country> countries = new List<country>();
 

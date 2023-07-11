@@ -68,7 +68,8 @@
                             <td width="">@obj.dob.ToString("dd/MM/yyyy")</td>
                             <td width="">@obj.Email</td>
                             <td width="">@obj.phoneNumber</td>
-                            <td width="">@obj.isActive</td>
+                        <td width="">@(obj.isActive ? "Yes" : "No")</td>
+
                             <td width="">@obj.Gender</td>
                             <td>
                                 <div class="w-75 btn-group" role="group">

@@ -4,10 +4,8 @@
     ViewData["Title"] = "Create User";
     var errorMessage = TempData["errorMessage"]?.ToString();
 }
-
 <h3>@ViewData["Title"]?.ToString()</h3>
 <link href="~/css/form.css" rel="stylesheet" />
-
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
@@ -15,66 +13,112 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
-@using (Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "row g-3" }))
+@using (Html.BeginForm("Create", "User", FormMethod.Post))
 {
-    <div class="box">
+    
+<div class="box">
+    <form class="row g-3" method="post">
+
+        @*<div class="col-md-12">
+        <label class="form-label">Name</label>
+        </div>*@
         <div class="d-flex flex-row">
+
             <div class="p-2">
-                @Html.LabelFor(model => model.userData.firstName, "First Name")
-                <br/>
-                @Html.TextBoxFor(model => model.userData.firstName, new { @class = "input", required = "required" })
+                <label for="firstName">First Name</label>
+                <input type="text" class="" id="firstName" asp-for="userData.firstName" required>
             </div>
             <div class="p-2">
-                @Html.LabelFor(model => model.userData.lastName, "Last Name")
-                <br/>
-                @Html.TextBoxFor(model => model.userData.lastName, new { @class ="input", required = "required" })
+                <label for="lastName">Last Name</label>
+                <input type="text" class="" id="lastName" asp-for="userData.lastName" required>
             </div>
+
+
             <div class="p-2">
-                @Html.LabelFor(model => model.userData.dob, "Birth Date")
-                <br/>
-                @Html.TextBoxFor(model => model.userData.dob, new { @class = "input", type = "date", required = "required" })
+                <label class="control-label"></label>
+                <label for="datepicker">Birth Date</label>
+                <input id="datepicker" type="date" class="" asp-for="userData.dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" required />
                 <span class="text-danger"></span>
             </div>
+
+
             <div class="p-2">
-                @Html.LabelFor(model => model.userData.phoneNumber, "Contact Number")
-                <br/>
-                @Html.TextBoxFor(model => model.userData.phoneNumber, new { @class = "input", required = "required", maxlength = "10" })
+                <label for="phoneNumber">Contact Number</label>
+                <input type="text" class="" id="phoneNumber" asp-for="userData.phoneNumber" required maxlength="10">
             </div>
         </div>
         <div class="d-flex flex-row">
+
             <div class="p-2">
-                @Html.LabelFor(model => model.userData.Email, "Email Address")
-                <br/>
-                @Html.TextBoxFor(model => model.userData.Email, new { @class = "input", required = "required" })
+                <label for="phoneNumber">Email Address</label><br />
+                <input type="text" class="" id="Email" asp-for="userData.Email" required>
             </div>
-            <div class="p-2" style="margin-top: 10px; margin-left: 38px;">
-                @Html.LabelFor(model => model.userData.isActive, "Is Active?")
+            <div class="p-2" style="margin-top:10px;margin-left:38px;">
+                <label class="" for="flexCheckDefault">
+                    Is Active?
+                </label>
                 <br />
-                @Html.CheckBoxFor(model => model.userData.isActive, new { @class = "form-check-input" })
+                <input class="form-check-input" type="checkbox" asp-for="userData.isActive" value="" id="flexCheckDefault">
             </div>
-            <div style="margin-top: 18px; margin-left: 38px;">
+            <div style="margin-top:18px;margin-left:38px;" class="">
+
                 <label>Gender</label>
-                <div class="d-flex flex-row">
+                <div style="" class="d-flex flex-row">
                     <div class="p-2">
-                        @Html.RadioButtonFor(model => model.userData.Gender, "1", new { @class = "form-check-input", required = "required" })
+                        <input class="form-check-input" type="radio" asp-for="userData.Gender" value="1" required>
                         <label class="form-check-label" for="inlineRadio1">Male</label>
                     </div>
                     <div class="p-2">
-                        @Html.RadioButtonFor(model => model.userData.Gender, "2", new { @class = "form-check-input", required = "required" })
+                        <input class="form-check-input" type="radio" asp-for="userData.Gender" value="2" required>
                         <label class="form-check-label" for="inlineRadio2">Female</label>
                     </div>
                     <div class="p-2">
-                        @Html.RadioButtonFor(model => model.userData.Gender, "3", new { @class = "form-check-input", required = "required" })
+                        <input class="form-check-input" type="radio" asp-for="userData.Gender" value="3" required>
                         <label class="form-check-label" for="inlineRadio3">Other</label>
                     </div>
                 </div>
             </div>
+            @*<div class="" style="margin-top:15px;margin-left:58px;">
+            <label>Country</label><br />
+            <select id="CountryId" style="color:black" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+            </div>*@
         </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            @Html.ActionLink("Cancel", "Index", "User", null, new { @class = "btn btn-danger" })
+
+
+
+        <!-- State Dropdown -->
+        @*<div class="d-flex flex-row">
+        <div class="p-2">
+
+        <label>State</label>
+        <select id="" style="color:black" asp-for="Address.stateId" style="width:100px"></select>
         </div>
+        </div>*@
+
+        @*@<div class="col-md-6">
+        <label class="form-label">Address Details</label>
+        </div>
+        <select class="form-select col-md-6" size="3" aria-label="size 3 select example">
+        <option selected>Address Type</option>
+        </select>
+        <div class="form-floating col-md-6">
+        <input type="text" class="form-control" id="Country" placeholder="Select Country" name="email">
+        <label for="email">Email</label>
+        </div>
+        <div class="col-md-6 form-floating">
+        <input type="text" class="form-control" id="phoneNumber" placeholder="Enter Contact Number">
+        <label for="phoneNumber">Contact Number</label>
+        </div>*@
+        <div class="">
+            <div class="">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a asp-controller="User" asp-action="Index" class="btn btn-danger">
+                    <i class="bi bi-plus-circle"></i> &nbsp; Cancel
+                </a>
+            </div>
+        </div>
+
+    </form>
     <table id="address-table" class="table">
         <thead>
             <tr>
@@ -86,15 +130,12 @@
             </tr>
         </thead>
         <tbody>
-            
         </tbody>
     </table>
-    </div>
 
-
-    <input type="submit" id="add-row" class="" style="width"/ value="Add">
+    <button type="button" id="add-row" class="btn btn-primary">Add</button>
+</div>
 }
-
 @section Scripts{
     <script>
         $(document).ready(function () {
@@ -119,42 +160,46 @@
                     }
                 });
             });
+        });
 
-            // Regular expression for phone number validation
-            var phoneNumberPattern = /^\d{10}$/;
+        // Regular expression for phone number validation
+        var phoneNumberPattern = /^\d{10}$/;
 
-            // Get the phone number input field
-            var phoneNumberInput = $('#phoneNumber');
+        // Get the phone number input field
+        var phoneNumberInput = document.getElementById('phoneNumber');
 
-            // Add an event listener to the input field for validation
-            phoneNumberInput.on('input', function () {
-                var phoneNumber = phoneNumberInput.val();
+        // Add an event listener to the input field for validation
+        phoneNumberInput.addEventListener('input', function () {
+            var phoneNumber = phoneNumberInput.value;
 
-                // Validate the phone number using the regular expression
-                if (phoneNumberPattern.test(phoneNumber)) {
-                    // Valid phone number
-                    phoneNumberInput[0].setCustomValidity('');
-                } else {
-                    // Invalid phone number
-                    phoneNumberInput[0].setCustomValidity('Please enter a valid phone number.');
-                }
-            });
+            // Validate the phone number using the regular expression
+            if (phoneNumberPattern.test(phoneNumber)) {
+                // Valid phone number
+                phoneNumberInput.setCustomValidity('');
+            } else {
+                // Invalid phone number
+                phoneNumberInput.setCustomValidity('Please enter a valid phone number.');
+            }
+        });
 
+    </script>
+    <script>
+        $(function () {
             // Handle add row button click
             $('#add-row').click(function () {
                 $.ajax({
                     url: '@Url.Action("AddAddressRow", "User")',
                     type: 'GET',
                     success: function (result) {
-                        var newRow = $(result);
-                        newRow.find(':input').each(function () {
-                            $(this).val('');
-                        });
-                        newRow.find('.text-danger').text('');
-                        $('#address-table tbody').append(newRow);
+                        $('#address-table tbody').append(result);
+
+                        // Reinitialize any necessary scripts or plugins for the new row
+
+                        // Example: If you're using datepicker for the new row's date field
+                        
                     }
                 });
             });
-        });
+        });;
     </script>
 }

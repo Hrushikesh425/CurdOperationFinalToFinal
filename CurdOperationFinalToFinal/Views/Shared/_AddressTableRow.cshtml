@@ -1,22 +1,28 @@
-﻿@model CurdOperationFinalToFinal.Models.UserVM.UserVM
+﻿@model userAddress;
+@using Microsoft.AspNetCore.Mvc.Rendering;
+@using HtmlHelpers.BeginCollectionItemCore;
 
 
 <tr>
+    @using (Html.BeginCollectionItem("Address"))
+    {
+        
     <td>
-        @Html.EditorFor(model => model.Address.address)
+        @Html.EditorFor(model => model.address)
     </td>
     <td>
-        @Html.EditorFor(model => model.Address.city)
-    </td>
-    <td     >
-        <select class="country-select" style="color:black" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+        @Html.EditorFor(model => model.city)
     </td>
     <td>
-        <select class="state-select" style="color:black" asp-for="Address.stateId" style="width:100px"></select>
+        <select class="country-select" style="color:black" asp-for="countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+    </td>
+    <td>
+        <select class="state-select" style="color:black" asp-for="stateId" style="width:100px"></select>
     </td>
     <td>
         <button class="btn btn-danger delete-row">Delete</button>
     </td>
+    }
 </tr>
 
 <script>
