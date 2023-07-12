@@ -4,26 +4,17 @@
     ViewData["Title"] = "Edit User";
     var errorMessage = TempData["errorMessage"]?.ToString();
 }
+
 <h3 style="margin-top:30px">@ViewData["Title"]?.ToString()</h3>
 <hr />
 <link href="~/css/form.css" rel="stylesheet" />
-@*@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <div class="alert alert-danger">
-        <b>Error: </b>@errorMessage
-        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}*@
+
 <div class="box" style="margin-top:70px">
     <form class="row g-3" method="post">
-        
-        @*<div class="col-md-12">
-        <label class="form-label">Name</label>
-        </div>*@
         <div class="d-flex flex-row">
             <div class="p-2">
-                <label for="id">id</label>
-                <input type="text" class="" id="firstName" asp-for="userData.id" required>
+                <label for="id">ID</label>
+                <input type="text" class="" id="id" asp-for="userData.id" readonly>
             </div>
             <div class="p-2">
                 <label for="firstName">First Name</label>
@@ -33,25 +24,19 @@
                 <label for="lastName">Last Name</label>
                 <input type="text" class="" id="lastName" asp-for="userData.lastName" required>
             </div>
-
-
             <div class="p-2">
-                <label class="control-label"></label>
                 <label for="datepicker">Birth Date</label>
-                <input id="datepicker" type="date" class="" asp-for="userData.dob"  required />
+                <input id="datepicker" type="date" class="" asp-for="userData.dob" required />
                 <span class="text-danger"></span>
             </div>
-
-
             <div class="p-2">
                 <label for="phoneNumber">Contact Number</label>
                 <input type="text" class="" id="phoneNumber" asp-for="userData.phoneNumber" required maxlength="10">
             </div>
         </div>
         <div class="d-flex flex-row">
-
             <div class="p-2">
-                <label for="phoneNumber">Email Address</label><br />
+                <label for="Email">Email Address</label><br />
                 <input type="text" class="" id="Email" asp-for="userData.Email" required>
             </div>
             <div class="p-2" style="margin-top:30px;margin-left:8px;">
@@ -61,7 +46,6 @@
                 <input class="form-check-input" type="checkbox" asp-for="userData.isActive" value="" id="flexCheckDefault">
             </div>
             <div style="margin-top:30px;margin-left:8px;" class="d-flex flex-row">
-
                 <label style="margin-top:8px">
                     Gender
                 </label>
@@ -78,45 +62,34 @@
                     <label class="form-check-label" for="inlineRadio3">Other</label>
                 </div>
             </div>
-            @*<div class="p-2" style="margin-top:30px;margin-left:8px;">
-                <label>Country</label>
-                <select id="CountryId" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
-            </div>*@
         </div>
 
+        <table id="address-table" class="table">
+            <thead>
+                <tr>
+                    <th>Address Line</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var add in Model.AddressList)
+                {
+                    @Html.Partial("_EditAdddressPartialView",Model)
+                }
+            </tbody>
+        </table>
 
-
-        <!-- State Dropdown -->
-        @*<div class="d-flex flex-row">
-            <div class="p-2">
-
-                <label>State</label>
-                <select id="StateId" asp-for="Address.stateId" style="width:100px"></select>
-            </div>
-        </div>*@
-        @*@<div class="col-md-6">
-        <label class="form-label">Address Details</label>
-        </div>
-        <select class="form-select col-md-6" size="3" aria-label="size 3 select example">
-        <option selected>Address Type</option>
-        </select>
-        <div class="form-floating col-md-6">
-        <input type="text" class="form-control" id="Country" placeholder="Select Country" name="email">
-        <label for="email">Email</label>
-        </div>
-        <div class="col-md-6 form-floating">
-        <input type="text" class="form-control" id="phoneNumber" placeholder="Enter Contact Number">
-        <label for="phoneNumber">Contact Number</label>
-        </div>*@
-        <div class="">
-            <div class="">
+        <div>
+            <div>
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <a asp-controller="User" asp-action="Index" class="btn btn-danger">
                     <i class="bi bi-plus-circle"></i> &nbsp; Cancel
                 </a>
             </div>
         </div>
-
     </form>
 </div>
 @section Scripts{

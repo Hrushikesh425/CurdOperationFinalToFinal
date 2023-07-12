@@ -74,6 +74,7 @@ namespace CurdOperationFinalToFinal.Controllers
             List<country> countries = _dal.GetCountries();
             UserVM employee = new UserVM()
             {
+                
                 AddressList = new List<userAddress>(),
                 
                 countries = countries
@@ -188,6 +189,7 @@ namespace CurdOperationFinalToFinal.Controllers
 
             return PartialView("_AddressTableRow", employeeVM);
         }
+
 
 
 

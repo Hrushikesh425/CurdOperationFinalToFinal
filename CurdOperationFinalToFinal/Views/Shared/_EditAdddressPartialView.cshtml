@@ -1,0 +1,61 @@
+﻿@model CurdOperationFinalToFinal.Models.UserVM.UserVM
+@using Microsoft.AspNetCore.Mvc.Rendering;
+@using HtmlHelpers.BeginCollectionItemCore;
+
+
+<tr>
+    
+
+        <td>
+            <input type="text" class="" id="address" asp-for="@Model.Address.address" required>
+        </td>
+        <td>
+        <input type="text" class="" id="address" asp-for="@Model.Address.city" required>
+        </td>
+        <td>
+            <select class="country-select" style="color:black" asp-for="@Model.Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+        </td>
+        <td>
+            <select class="state-select" style="color:black" asp-for="@Model.Address.stateId" style="width:100px"></select>
+        </td>
+        <td>
+            <button class="btn btn-danger delete-row">Delete</button>
+        </td>
+    
+</tr>
+<script>
+    $(function () {
+        // Handle delete row button click
+        $('.delete-row').click(function () {
+            $(this).closest('tr').remove();
+        });
+    });
+    $(document).ready(function () {
+        // Country dropdown change event
+        $('.country-select').change(function () {
+            var $row = $(this).closest('tr');
+            var countryId = $(this).val();
+            var $stateSelect = $row.find('.state-select');
+
+            // Make AJAX request to fetch states
+            $.ajax({
+                url: '@Url.Action("GetStatesByCountry", "User")',
+                type: 'GET',
+                data: { countryId: countryId },
+                success: function (result) {
+                    // Clear existing options
+                    $stateSelect.empty();
+
+                    // Add new options based on the retrieved states
+                    $.each(result, function (index, state) {
+                        $stateSelect.append($('<option></option>').val(state.id).text(state.name));
+                    });
+                }
+            });
+        });
+    });
+
+
+</script>
+
+

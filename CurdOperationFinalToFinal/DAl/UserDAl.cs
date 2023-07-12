@@ -177,17 +177,20 @@ namespace CurdOperationFinalToFinal.DAl
 
         public UserVM GetById(int id)
         {
+            List<country> countries = GetCountries();
             try
             {
                 UserVM employee = new UserVM()
                 {
+                    Address = new userAddress(),
                     userData = new userData(),
-                    AddressList = new List<userAddress>()
+                    AddressList = new List<userAddress>(),
+                    countries = countries
                 };
 
                 using (con = new SqlConnection(GetConnectionString()))
                 {
-                    userAddress address = new userAddress();
+                    //userAddress address = new userAddress();
                     cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "[dbo].[spGet_AllDetailsById]";
@@ -207,14 +210,14 @@ namespace CurdOperationFinalToFinal.DAl
                         employee.userData.isActive = Convert.ToBoolean(dr["isActive"]);
 
 
-                        address.countryId = Convert.ToInt32(dr["CountryId"]);
-                        address.stateId = Convert.ToInt32(dr["StateId"]);
-                        address.address = Convert.ToString(dr["address"]);
-                        address.city = Convert.ToString(dr["City"]);
+                        employee.Address.countryId = Convert.ToInt32(dr["CountryId"]);
+                        employee.Address.stateId = Convert.ToInt32(dr["StateId"]);
+                        employee.Address.address = Convert.ToString(dr["address"]);
+                        employee.Address.city = Convert.ToString(dr["City"]);
 
 
                         // Add the address to the address list
-                        employee.AddressList.Add(address);
+                        employee.AddressList.Add(employee.Address);
                     }
                     con.Close();
                     return employee;
