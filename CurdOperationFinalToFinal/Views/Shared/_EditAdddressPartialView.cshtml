@@ -1,22 +1,25 @@
-﻿@model CurdOperationFinalToFinal.Models.UserVM.UserVM
+﻿@model userAddress;
 @using Microsoft.AspNetCore.Mvc.Rendering;
 @using HtmlHelpers.BeginCollectionItemCore;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <tr>
     
 
         <td>
-            <input type="text" class="" id="address" asp-for="@Model.Address.address" required>
+            <input type="text" class="" id="address" asp-for="address" required>
         </td>
         <td>
-        <input type="text" class="" id="address" asp-for="@Model.Address.city" required>
+        <input type="text" class="" id="address" asp-for="city" required>
         </td>
         <td>
-            <select class="country-select" style="color:black" asp-for="@Model.Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+            <select class="country-select" style="color:black" asp-for="@Model.countryId" asp-items="@(new SelectList(Model.countries, "id", "name", Model.countryId))" style="width: 100px;" required></select>
+        <option disabled selected>Select Country</option>
+
         </td>
         <td>
-            <select class="state-select" style="color:black" asp-for="@Model.Address.stateId" style="width:100px"></select>
+            <select class="state-select" style="color:black" asp-for="@Model.stateId" style="width:100px"></select>
         </td>
         <td>
             <button class="btn btn-danger delete-row">Delete</button>
@@ -30,6 +33,37 @@
             $(this).closest('tr').remove();
         });
     });
+    $(document).ready(function () {
+        // Iterate over each address row
+        $('.country-select').each(function () {
+            var countryId = $(this).val();
+            var stateDropdown = $(this).closest('tr').find('.state-select');
+
+            // Clear previous state options
+            stateDropdown.empty();
+            stateDropdown.append('<option disabled>Select State</option>');
+
+            // Make AJAX call to get states for the country ID
+            if (countryId !== '') {
+                $.ajax({
+                    url: '@Url.Action("GetStatesByCountry", "User")',
+                    type: 'GET',
+                    data: { countryId: countryId },
+                    success: function (result) {
+                        // Populate state dropdown with retrieved states
+                        $.each(result, function (index, state) {
+                            debugger
+                            var selected = state.id === $(stateDropdown).data('selected-state-id') ? 'selected' : '';
+                            stateDropdown.append('<option value="' + state.id + '" ' + selected + '>' + state.name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        console.log('Failed to retrieve states.');
+                    }
+                });
+            }
+        });
+    }); 
     $(document).ready(function () {
         // Country dropdown change event
         $('.country-select').change(function () {

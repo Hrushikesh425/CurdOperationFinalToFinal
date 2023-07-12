@@ -6,7 +6,7 @@
 
 		public userAddress Address { get; set; }
 
-		public List<userAddress> AddressList { get; set; }
+		
        
         public List<country> countries { get; set; }
 		public List<state> States { get; set; }

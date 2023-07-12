@@ -55,7 +55,7 @@ namespace CurdOperationFinalToFinal.DAl
             return userFinal;
         }
 
-        public bool Insert(UserVM model, List<userAddress> Address)
+        public bool Insert(userData model, List<userAddress> Address)
         {
             string addressListJson = JsonConvert.SerializeObject(Address);
             int id = 0;
@@ -64,13 +64,13 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "[dbo].[SaveEmployee]";
-                cmd.Parameters.AddWithValue("@firstname", model.userData.firstName);
-                cmd.Parameters.AddWithValue("@lastname", model.userData.lastName);
-                cmd.Parameters.AddWithValue("@dob", model.userData.dob.Date);
-                cmd.Parameters.AddWithValue("@phonenumber", model.userData.phoneNumber);
-                cmd.Parameters.AddWithValue("@isActive", model.userData.isActive);
-                cmd.Parameters.AddWithValue("@email", model.userData.Email);
-                cmd.Parameters.AddWithValue("genderId", model.userData.Gender);
+                cmd.Parameters.AddWithValue("@firstname", model.firstName);
+                cmd.Parameters.AddWithValue("@lastname", model.lastName);
+                cmd.Parameters.AddWithValue("@dob", model.dob.Date);
+                cmd.Parameters.AddWithValue("@phonenumber", model.phoneNumber);
+                cmd.Parameters.AddWithValue("@isActive", model.isActive);
+                cmd.Parameters.AddWithValue("@email", model.Email);
+                cmd.Parameters.AddWithValue("genderId", model.Gender);
                 cmd.Parameters.AddWithValue("@AddressList", addressListJson);
 
                 // Set the SQLDbType to NVarChar for the @AddressList parameter
@@ -175,21 +175,22 @@ namespace CurdOperationFinalToFinal.DAl
             return states;
         }
 
-        public UserVM GetById(int id)
-        {
+        public userData GetById(int id)
+            {
             List<country> countries = GetCountries();
             try
             {
-                UserVM employee = new UserVM()
-                {
-                    Address = new userAddress(),
-                    userData = new userData(),
-                    AddressList = new List<userAddress>(),
-                    countries = countries
-                };
 
+
+                userData employee = new userData()
+                {
+                   
+                    AddressList = new List<userAddress>(),
+                    
+                };
                 using (con = new SqlConnection(GetConnectionString()))
                 {
+                    userData data = new userData();
                     //userAddress address = new userAddress();
                     cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -200,24 +201,24 @@ namespace CurdOperationFinalToFinal.DAl
                     while (dr.Read())
                     {
                         
-                        employee.userData.id = Convert.ToInt32(dr["id"]);
-                        employee.userData.firstName = Convert.ToString(dr["firstName"]);
-                        employee.userData.lastName = Convert.ToString(dr["lastName"]);
-                        employee.userData.Gender = Convert.ToString(dr["GenderId"]);
-                        employee.userData.dob = Convert.ToDateTime(dr["dob"]).Date;
-                        employee.userData.Email = Convert.ToString(dr["Email"]);
-                        employee.userData.phoneNumber = Convert.ToString(dr["phoneNumber"]);
-                        employee.userData.isActive = Convert.ToBoolean(dr["isActive"]);
+                       employee.id = Convert.ToInt32(dr["id"]);
+                        employee.firstName = Convert.ToString(dr["firstName"]);
+                       employee.lastName = Convert.ToString(dr["lastName"]);
+                      employee.Gender = Convert.ToString(dr["GenderId"]);
+                        employee.dob = Convert.ToDateTime(dr["dob"]).Date;
+                        employee.Email = Convert.ToString(dr["Email"]);
+                        employee.phoneNumber = Convert.ToString(dr["phoneNumber"]);
+                        employee.isActive = Convert.ToBoolean(dr["isActive"]);
 
-
-                        employee.Address.countryId = Convert.ToInt32(dr["CountryId"]);
-                        employee.Address.stateId = Convert.ToInt32(dr["StateId"]);
-                        employee.Address.address = Convert.ToString(dr["address"]);
-                        employee.Address.city = Convert.ToString(dr["City"]);
+                        userAddress add = new userAddress();
+                        add.countryId = Convert.ToInt32(dr["CountryId"]);
+                        add.stateId = Convert.ToInt32(dr["StateId"]);
+                        add.address = Convert.ToString(dr["address"]);
+                        add.city = Convert.ToString(dr["City"]);
 
 
                         // Add the address to the address list
-                        employee.AddressList.Add(employee.Address);
+                        employee.AddressList.Add(add);
                     }
                     con.Close();
                     return employee;

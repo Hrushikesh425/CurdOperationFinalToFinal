@@ -26,12 +26,12 @@ namespace CurdOperationFinalToFinal.Models
 		public bool isActive { get; set; } = true;
         //public bool isDelete { get; set; }
 
-		//gender id foreign key 
-		//[Display(Name = "userAddress")]
-		//public virtual int userAddressId { get; set; }
-		//[ForeignKey("id")]
-		//public virtual userAddress userAddress { get; set; }
-		//ending of foreign key 
-        public List<userAddress> addresses { get; set; }
-	}
+        //gender id foreign key 
+        //[Display(Name = "userAddress")]
+        //public virtual int userAddressId { get; set; }
+        //[ForeignKey("id")]
+        //public virtual userAddress userAddress { get; set; }
+        //ending of foreign key 
+        public List<userAddress> AddressList { get; set; }
+    }
 }

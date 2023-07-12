@@ -36,23 +36,16 @@ namespace CurdOperationFinalToFinal.Controllers
 		[HttpGet]
 		public IActionResult Create()
 		{
-			//List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
-			List<country> countries = _dal.GetCountries();
+            //List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
+            userData employee = new userData();
+            return View(employee);
 
-			UserVM userVm = new UserVM
-			{
-				userData = new userData(),
-				Address = new userAddress(),
-				
-		        countries = countries,
-			};
 
-			return View(userVm); ;
-		}
+        }
 		private gender model = new gender();
 
         [HttpPost]
-		public IActionResult Create(UserVM data, List<userAddress> Address)
+		public IActionResult Create(userData data, List<userAddress> Address)
 		{
 			//if(!ModelState.IsValid)
 			//{
@@ -71,19 +64,17 @@ namespace CurdOperationFinalToFinal.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            List<country> countries = _dal.GetCountries();
-            UserVM employee = new UserVM()
-            {
-                
-                AddressList = new List<userAddress>(),
-                
-                countries = countries
-            };
+            userData employee = new userData();
             try
             {
                 employee = _dal.GetById(id);
+                List<country> countries = _dal.GetCountries();
+                foreach (var item in employee.AddressList)
+                {
+                    item.countries = countries;
+                }
 
-                if (employee.userData.id == null)
+                if (employee.id == null)
                 {
                     TempData["errorMessage"] = $"User details not found with Id: {id}";
                     return RedirectToAction("Index");
@@ -133,9 +124,9 @@ namespace CurdOperationFinalToFinal.Controllers
             try
             {
 
-                UserVM userViewModel = _dal.GetById(id);
+                userData userViewModel = _dal.GetById(id);
 
-                if (userViewModel.userData.id == 0)
+                if (userViewModel.id == 0)
                 {
                     TempData["errorMessage"] = $"User details not found with Id: {id}";
                     return RedirectToAction("Index");
