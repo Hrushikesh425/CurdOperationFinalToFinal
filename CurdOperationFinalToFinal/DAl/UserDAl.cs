@@ -211,6 +211,7 @@ namespace CurdOperationFinalToFinal.DAl
                         employee.isActive = Convert.ToBoolean(dr["isActive"]);
 
                         userAddress add = new userAddress();
+                        add.addressId = Convert.ToInt32(dr["addressId"]);
                         add.countryId = Convert.ToInt32(dr["CountryId"]);
                         add.stateId = Convert.ToInt32(dr["StateId"]);
                         add.address = Convert.ToString(dr["address"]);
@@ -233,15 +234,16 @@ namespace CurdOperationFinalToFinal.DAl
 
 
 
-        public bool Update(userData model)
+        public bool Update(userData model, List<userAddress> Address)
         {
+            string addressListJson = JsonConvert.SerializeObject(Address);
             int id = 0;
             using (con = new SqlConnection(GetConnectionString()))
             {
                 cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "[dbo].[sp_update_user]";
-                cmd.Parameters.AddWithValue("@id", model.id);
+                cmd.CommandText = "[dbo].[spUpdateAll_Employee]";
+                cmd.Parameters.AddWithValue("@UserId", model.id);
                 cmd.Parameters.AddWithValue("@firstname", model.firstName);
                 cmd.Parameters.AddWithValue("@lastname", model.lastName);
                 cmd.Parameters.AddWithValue("@dob", model.dob.Date);
@@ -249,6 +251,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@isActive", model.isActive);
                 cmd.Parameters.AddWithValue("@email", model.Email);
                 cmd.Parameters.AddWithValue("genderId", model.Gender);
+                cmd.Parameters.AddWithValue("@AddressesJson", addressListJson);
                 con.Open();
 
                 id = cmd.ExecuteNonQuery();
@@ -256,6 +259,39 @@ namespace CurdOperationFinalToFinal.DAl
             }
             return id > 0 ? true : false;
         }
+
+
+        public bool UpdateAll(userData model, List<userAddress> AddressList)
+        {
+            int id = 0;
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "finalUpdate";
+                cmd.Parameters.AddWithValue("@UserId", model.id);
+                cmd.Parameters.AddWithValue("@firstName", model.firstName);
+                cmd.Parameters.AddWithValue("@lastName", model.lastName);
+                cmd.Parameters.AddWithValue("@genderId", model.Gender);
+                cmd.Parameters.AddWithValue("@dob", model.dob);
+                cmd.Parameters.AddWithValue("@Email", model.Email);
+                cmd.Parameters.AddWithValue("@phoneNumber", model.phoneNumber);
+                cmd.Parameters.AddWithValue("@isActive", model.isActive);
+                cmd.Parameters.AddWithValue("@AddressesJson", JsonConvert.SerializeObject(AddressList));
+
+                con.Open();
+                id = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+
+            return id > 0 ? true : false;
+        }
+
+
+
+
+
+
         public bool Delete(int id)
         {
             int i = 0;

@@ -90,32 +90,31 @@ namespace CurdOperationFinalToFinal.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult Edit(userData data)
+         [HttpPost]
+        public IActionResult Edit(userData employee, List<userAddress> AddressList)
         {
             try
             {
-                bool result = _dal.Update(data);
-                if (!ModelState.IsValid)
-                {
-                    TempData["errorMessage"] = "Model Data is InValid";
-                    return View();
-                }
-
+                //if (!ModelState.IsValid)
+                //{
+                //    TempData["errorMessage: "] = "Model Data is invalid";
+                //    return View();
+                //}
+                bool result = _dal.UpdateAll(employee, AddressList);
                 if (!result)
                 {
                     TempData["errorMessage"] = "Unable to update the data";
                     return View();
                 }
-                TempData["sucessMessage"] = "Employee details Updated";
+                TempData["successMessage"] = "Employee Details upadated";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-
-                TempData["errorMessage"] = ex.Message;
+                TempData["errorMessage: "] = ex.Message;
                 return View();
             }
+
         }
         [HttpGet]
         public IActionResult Delete(int id)

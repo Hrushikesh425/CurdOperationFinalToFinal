@@ -6,7 +6,7 @@ namespace CurdOperationFinalToFinal.Models
 	public class userAddress
 	{
 		[Key]
-		public int Id { get; set; }
+		public int addressId{ get; set; }
         public string  address { get; set; }
         public string  city { get; set; }
 
@@ -24,7 +24,7 @@ namespace CurdOperationFinalToFinal.Models
         public List<country> countries { get; set; }
         public List<state> States { get; set; }
 
-		public List<userAddress> Addresses { get; set; }
+	
 
 
 

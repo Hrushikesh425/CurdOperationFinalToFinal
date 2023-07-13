@@ -6,8 +6,10 @@
 
 <tr>
     
-
-        <td>
+    @using (Html.BeginCollectionItem("AddressList"))
+    {
+      <input hidden asp-for="@Model.addressId">  
+    <td>
             <input type="text" class="" id="address" asp-for="address" required>
         </td>
         <td>
@@ -24,6 +26,7 @@
         <td>
             <button class="btn btn-danger delete-row">Delete</button>
         </td>
+    }
     
 </tr>
 <script>
