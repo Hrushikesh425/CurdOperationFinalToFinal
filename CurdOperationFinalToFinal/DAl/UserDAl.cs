@@ -59,6 +59,7 @@ namespace CurdOperationFinalToFinal.DAl
         {
             string addressListJson = JsonConvert.SerializeObject(Address);
             int id = 0;
+            string demo = "\\uploadFile\\"+model.uploadFile.FileName;
             using (con = new SqlConnection(GetConnectionString()))
             {
                 cmd = con.CreateCommand();
@@ -71,6 +72,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@isActive", model.isActive);
                 cmd.Parameters.AddWithValue("@email", model.Email);
                 cmd.Parameters.AddWithValue("genderId", model.Gender);
+                cmd.Parameters.AddWithValue("@userExcel", model.userExcel);
                 cmd.Parameters.AddWithValue("@AddressList", addressListJson);
 
                 // Set the SQLDbType to NVarChar for the @AddressList parameter

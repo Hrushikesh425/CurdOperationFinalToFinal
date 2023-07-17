@@ -13,7 +13,8 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-@using (Html.BeginForm("Create", "User", FormMethod.Post))
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new
+{ enctype = "multipart/form-data" }))
 {
     
 <div class="box">
@@ -76,8 +77,14 @@
                         <input class="form-check-input" type="radio" asp-for="Gender" value="3" required>
                         <label class="form-check-label" for="inlineRadio3">Other</label>
                     </div>
+                    
                 </div>
+                    
             </div>
+                <div class="p-2" style="margin-top:15px">
+                    <label class="form-check-label" for="inlineRadio3">Upload user Excel file </label> <br/>
+                    <input type="file" required name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
+                </div>
             @*<div class="" style="margin-top:15px;margin-left:58px;">
             <label>Country</label><br />
             <select id="CountryId" style="color:black" asp-for="Address.countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>

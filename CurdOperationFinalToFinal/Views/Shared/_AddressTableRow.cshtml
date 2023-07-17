@@ -14,10 +14,11 @@
         @Html.EditorFor(model => model.city)
     </td>
     <td>
-        <select class="country-select" style="color:black" asp-for="countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required></select>
+            <select class="country-select" style="color:black" asp-for="countryId" asp-items="@(new SelectList(Model.countries, "id", "name"))" style="width: 100px;" required><option disabled selected>Select Country</option></select>
+            
     </td>
     <td>
-        <select class="state-select" style="color:black" asp-for="stateId" style="width:100px"></select>
+            <select class="state-select" style="color:black" asp-for="stateId" style="width:100px"><option disabled selected>Select State</option></select>
     </td>
     <td>
         <button class="btn btn-danger delete-row">Delete</button>
@@ -47,7 +48,7 @@
                 success: function (result) {
                     // Clear existing options
                     $stateSelect.empty();
-
+                    $stateSelect.append($('<option disabled selected>--Select State--</option>'));
                     // Add new options based on the retrieved states
                     $.each(result, function (index, state) {
                         $stateSelect.append($('<option></option>').val(state.id).text(state.name));

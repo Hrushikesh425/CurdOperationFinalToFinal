@@ -1,13 +1,13 @@
 ﻿using CurdOperationFinalToFinal.DAl;
 using CurdOperationFinalToFinal.Models;
-using CurdOperationFinalToFinal.Models.UserVM;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Metrics;
-using System.Reflection;
+using System;
 
 namespace CurdOperationFinalToFinal.Controllers
 {
-	public class UserController : Controller
+    public class UserController : Controller
 	{
 		private readonly UserDAl _dal;
         public UserController(UserDAl dal)
@@ -47,18 +47,34 @@ namespace CurdOperationFinalToFinal.Controllers
         [HttpPost]
 		public IActionResult Create(userData data, List<userAddress> Address)
 		{
-			//if(!ModelState.IsValid)
-			//{
-			//	TempData["errorMessage"] = "model data is not valid ";
-			//}
-			bool result = _dal.Insert(data,Address);
-			if(!result)
-			{
-				TempData["errorMessage"] = "unable to save the data";
-				return View();
-			}
+            var fileExtension = Path.GetExtension(data.uploadFile.FileName).ToLower();
+            if(fileExtension == ".xls" || fileExtension == ".xlsx")
+            {
+
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "C:\\uploaded_file");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + data.uploadFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                data.uploadFile.CopyTo(fileStream);
+            }
+
+
+            data.userExcel = filePath;  
+
+            bool result = _dal.Insert(data,Address);
 			TempData["successMessage"] = "Employe Details Saved";
 			return RedirectToAction("Index");
+			
+            }else
+            {
+                TempData["errorMessage"] = "file extension is invalid";
+                return RedirectToAction("Index");
+            }
+            
+
+            
 		}
 
         [HttpGet]

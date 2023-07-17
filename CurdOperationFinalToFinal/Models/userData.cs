@@ -1,5 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
+using System;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace CurdOperationFinalToFinal.Models
 {
@@ -24,6 +32,13 @@ namespace CurdOperationFinalToFinal.Models
         public string phoneNumber { get; set; }
         public string  Email { get; set; }
 		public bool isActive { get; set; } = true;
+
+        [DisplayName("user Excel ")]
+        public string  userExcel { get; set; }
+
+
+        public IFormFile uploadFile { get; set; }
+
         //public bool isDelete { get; set; }
 
         //gender id foreign key 
