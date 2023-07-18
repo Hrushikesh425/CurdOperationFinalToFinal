@@ -29,9 +29,8 @@
 
 
         <div class="p-2">
-            <label class="control-label"></label>
             <label for="datepicker">Birth Date</label>
-            <input id="datepicker" type="date" class="" asp-for="dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" required />
+            <input id="datepicker" type="date" class="" asp-for="dob" required />
             <span class="text-danger"></span>
         </div>
 
@@ -74,24 +73,10 @@
             </div>
 
         </div>
-        @if(Model.id != 0)
-        {
-            <div class="p-2" style="margin-top:15px">
-                <label class="form-check-label" for="inlineRadio3">Upload user Excel file</label> <br />
-                <input type="file" id="uploadFile" name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
-                @if (Model != null && !string.IsNullOrEmpty(Model.userExcel))
-                {
-                    <span id="fileNameSpan">@Model.userExcel</span>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="p-2" style="margin-top:15px">
-                <label class="form-check-label" for="inlineRadio3">Upload user Excel file </label> <br />
-                <input type="file" required name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
-            </div>
-        }
+        <div class="p-2" style="margin-top:15px">
+            <label class="form-check-label" for="inlineRadio3">Upload user Excel file </label> <br />
+            <input type="file" required name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
+        </div>
         
     </div>
 

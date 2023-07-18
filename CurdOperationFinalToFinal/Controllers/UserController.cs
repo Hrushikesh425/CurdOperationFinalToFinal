@@ -183,16 +183,15 @@ namespace CurdOperationFinalToFinal.Controllers
             {
                 try
                 {
-                    if (!ModelState.IsValid)
-                    {
-                        TempData["errorMessage"] = "Model data is invalid";
-                        return View();
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    TempData["errorMessage"] = "Model data is invalid";
+                    //    return View();
+                    //}
 
                     var files = HttpContext.Request.Form.Files;
                     string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "C:\\uploaded_file");
                     string oldImage = _dal.GetImage(employee.id);
-                    bool result = _dal.UpdateAll(employee, addressList);
 
                     if (files.Count > 0)
                     {
@@ -209,7 +208,7 @@ namespace CurdOperationFinalToFinal.Controllers
 
                         // Save the new file
                         using (var fileStream = new FileStream(newFilePath, FileMode.Create))
-                        {
+                        {   
                             files[0].CopyTo(fileStream);
                         }
 
@@ -219,6 +218,7 @@ namespace CurdOperationFinalToFinal.Controllers
                     {
                         employee.userExcel = oldImage;
                     }
+                    bool result = _dal.UpdateAll(employee, addressList);
 
                     if (!result)
                     {

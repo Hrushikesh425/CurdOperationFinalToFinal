@@ -216,7 +216,7 @@ namespace CurdOperationFinalToFinal.DAl
                     //userAddress address = new userAddress();
                     cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "[dbo].[spGet_AllDetailsById]";
+                    cmd.CommandText = "[dbo].[spGet_DetailsById]";
                     cmd.Parameters.AddWithValue("@Id", id);
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -232,6 +232,12 @@ namespace CurdOperationFinalToFinal.DAl
                         employee.phoneNumber = Convert.ToString(dr["phoneNumber"]);
                         employee.isActive = Convert.ToBoolean(dr["isActive"]);
                         employee.userExcel = Convert.ToString(dr["userExcel"]);
+                    }
+                    employee.AddressList.Clear();
+                    dr.NextResult();
+                    while (dr.Read())
+                    {
+
                         userAddress add = new userAddress();
                         add.addressId = Convert.ToInt32(dr["addressId"]);
                         add.countryId = Convert.ToInt32(dr["CountryId"]);
@@ -239,10 +245,10 @@ namespace CurdOperationFinalToFinal.DAl
                         add.address = Convert.ToString(dr["address"]);
                         add.city = Convert.ToString(dr["City"]);
 
-
-                        // Add the address to the address list
                         employee.AddressList.Add(add);
                     }
+
+                        // Add the address to the address list
                     con.Close();
                     return employee;
                 }
