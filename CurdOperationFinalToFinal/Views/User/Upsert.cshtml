@@ -1,0 +1,211 @@
+﻿@model userData
+
+
+@{
+    ViewData["Title"] = "Create Employee";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+}
+<h3>@ViewData["Title"]?.ToString()</h3>
+<hr />
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">
+        <b>Error: </b>@errorMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<form class="row g-3" method="post" enctype="multipart/form-data">
+    
+    <div class="d-flex flex-row">
+
+        <div class="p-2">
+            <label for="firstName">First Name</label>
+            <input type="text" class="" id="firstName" asp-for="firstName" required>
+        </div>
+        <div class="p-2">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="" id="lastName" asp-for="lastName" required>
+        </div>
+
+
+        <div class="p-2">
+            <label class="control-label"></label>
+            <label for="datepicker">Birth Date</label>
+            <input id="datepicker" type="date" class="" asp-for="dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" required />
+            <span class="text-danger"></span>
+        </div>
+
+
+        <div class="p-2">
+            <label for="phoneNumber">Contact Number</label>
+            <input type="text" class="" id="phoneNumber" asp-for="phoneNumber" required maxlength="10">
+        </div>
+    </div>
+    <div class="d-flex flex-row">
+
+        <div class="p-2">
+            <label for="phoneNumber">Email Address</label><br />
+            <input type="text" class="" id="Email" asp-for="Email" required>
+        </div>
+        <div class="p-2" style="margin-top:10px;margin-left:38px;">
+            <label class="" for="flexCheckDefault">
+                Is Active?
+            </label>
+            <br />
+            <input class="form-check-input" type="checkbox" asp-for="isActive" value="" id="flexCheckDefault">
+        </div>
+        <div style="margin-top:18px;margin-left:38px;" class="">
+
+            <label>Gender</label>
+            <div style="" class="d-flex flex-row">
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="1" required>
+                    <label class="form-check-label" for="inlineRadio1">Male</label>
+                </div>
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="2" required>
+                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                </div>
+                <div class="p-2">
+                    <input class="form-check-input" type="radio" asp-for="Gender" value="3" required>
+                    <label class="form-check-label" for="inlineRadio3">Other</label>
+                </div>
+
+            </div>
+
+        </div>
+        @if(Model.id != 0)
+        {
+            <div class="p-2" style="margin-top:15px">
+                <label class="form-check-label" for="inlineRadio3">Upload user Excel file</label> <br />
+                <input type="file" id="uploadFile" name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
+                @if (Model != null && !string.IsNullOrEmpty(Model.userExcel))
+                {
+                    <span id="fileNameSpan">@Model.userExcel</span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="p-2" style="margin-top:15px">
+                <label class="form-check-label" for="inlineRadio3">Upload user Excel file </label> <br />
+                <input type="file" required name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
+            </div>
+        }
+        
+    </div>
+
+    <table id="address-table" class="table">
+        <thead>
+            <tr>
+                <th>Address Line</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.id != 0)
+            {
+                @foreach (var add in Model.AddressList)
+                {
+
+                    @Html.Partial("_EditAdddressPartialView",add)
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="button"  class="btn btn-primary add-row" >Add Address</button>
+
+    
+    <div class="">
+        <div class="">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-controller="User" asp-action="Index" class="btn btn-danger">
+                <i class="bi bi-plus-circle"></i> &nbsp; Cancel
+            </a>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Country dropdown change event
+            $('#CountryId').change(function () {
+                var countryId = $(this).val();
+
+                // Make AJAX request to fetch states
+                $.ajax({
+                    url: '@Url.Action("GetStatesByCountry", "User")',
+                    type: 'GET',
+                    data: { countryId: countryId },
+                    success: function (result) {
+                        // Clear existing options
+                        $('#StateId').empty();
+
+                        // Add new options based on the retrieved states
+                        $.each(result, function (index, state) {
+                            debugger
+                            $('#StateId').append($('<option></option>').val(state.id).text(state.name));
+                        });
+                    }
+                });
+            });
+        });
+
+        // Regular expression for phone number validation
+        var phoneNumberPattern = /^\d{10}$/;
+
+        // Get the phone number input field
+        var phoneNumberInput = document.getElementById('phoneNumber');
+
+        // Add an event listener to the input field for validation
+        phoneNumberInput.addEventListener('input', function () {
+            var phoneNumber = phoneNumberInput.value;
+
+            // Validate the phone number using the regular expression
+            if (phoneNumberPattern.test(phoneNumber)) {
+                // Valid phone number
+                phoneNumberInput.setCustomValidity('');
+            } else {
+                // Invalid phone number
+                phoneNumberInput.setCustomValidity('Please enter a valid phone number.');
+            }
+        });
+
+    </script>
+    <script>
+        $(function () {
+            // Handle add row button click
+            $('.add-row').click(function () {
+                $.ajax({
+                    url: '@Url.Action("AddAddressRow", "User")',
+                    type: 'GET',
+                    success: function (result) {
+                        $('#address-table tbody').append(result);
+
+                        // Reinitialize any necessary scripts or plugins for the new row
+
+                        // Example: If you're using datepicker for the new row's date field
+                        
+                    }
+                });
+            });
+        });;
+        function displayFileName() {
+            var fileInput = document.getElementById('uploadFile');
+            var fileNameSpan = document.getElementById('fileNameSpan');
+
+            if (fileInput.files.length > 0) {
+                fileNameSpan.textContent = fileInput.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        }
+    </script>
+}

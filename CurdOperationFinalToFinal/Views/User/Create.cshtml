@@ -188,6 +188,16 @@
                 phoneNumberInput.setCustomValidity('Please enter a valid phone number.');
             }
         });
+        function displayFileName() {
+            var fileInput = document.getElementById('uploadFile');
+            var fileNameSpan = document.getElementById('fileNameSpan');
+
+            if (fileInput.files.length > 0) {
+                fileNameSpan.textContent = fileInput.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        }
 
     </script>
     <script>

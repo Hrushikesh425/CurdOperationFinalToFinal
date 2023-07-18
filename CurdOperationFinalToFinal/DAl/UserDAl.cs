@@ -45,6 +45,7 @@ namespace CurdOperationFinalToFinal.DAl
                     userList.phoneNumber = dr["phoneNumber"].ToString();
                     userList.Email = dr["Email"].ToString();
                     userList.isActive = Convert.ToBoolean(dr["isActive"]);
+                    userList.userExcel = dr["userExcel"].ToString();
                     userList.Gender = dr["Gender"].ToString();
 
                     userFinal.Add(userList);
@@ -145,7 +146,22 @@ namespace CurdOperationFinalToFinal.DAl
 
             return countries;
         }
+        public string GetImage(int id)
+        {
+            string imagePath = null;
+            using (con = new SqlConnection(GetConnectionString()))
+            {
+                string query = "SELECT userExcel FROM userData WHERE id = @Id";
+                SqlCommand command = new SqlCommand(query, con);
+                command.Parameters.AddWithValue("@Id", id);
 
+                con.Open();
+
+                imagePath = (string)command.ExecuteScalar();
+            }
+
+            return imagePath;
+        }
         //this function for state display using country id
         public List<state> GetStatesByCountry(int countryId)
         {
@@ -176,6 +192,10 @@ namespace CurdOperationFinalToFinal.DAl
 
             return states;
         }
+
+
+
+
 
         public userData GetById(int id)
             {
@@ -211,7 +231,7 @@ namespace CurdOperationFinalToFinal.DAl
                         employee.Email = Convert.ToString(dr["Email"]);
                         employee.phoneNumber = Convert.ToString(dr["phoneNumber"]);
                         employee.isActive = Convert.ToBoolean(dr["isActive"]);
-
+                        employee.userExcel = Convert.ToString(dr["userExcel"]);
                         userAddress add = new userAddress();
                         add.addressId = Convert.ToInt32(dr["addressId"]);
                         add.countryId = Convert.ToInt32(dr["CountryId"]);
@@ -253,6 +273,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@isActive", model.isActive);
                 cmd.Parameters.AddWithValue("@email", model.Email);
                 cmd.Parameters.AddWithValue("genderId", model.Gender);
+                cmd.Parameters.AddWithValue("userExcel", model.userExcel);
                 cmd.Parameters.AddWithValue("@AddressesJson", addressListJson);
                 con.Open();
 
@@ -279,6 +300,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@Email", model.Email);
                 cmd.Parameters.AddWithValue("@phoneNumber", model.phoneNumber);
                 cmd.Parameters.AddWithValue("@isActive", model.isActive);
+                cmd.Parameters.AddWithValue("userExcel", model.userExcel);
                 cmd.Parameters.AddWithValue("@AddressesJson", JsonConvert.SerializeObject(AddressList));
 
                 con.Open();

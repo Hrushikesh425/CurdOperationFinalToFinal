@@ -9,7 +9,7 @@
 <link href="~/css/form.css" rel="stylesheet" />
 
 <div class="box" style="margin-top:70px">
-    <form class="row g-3" method="post">
+    <form class="row g-3" method="post" enctype="multipart/form-data">
         <div class="d-flex flex-row">
             <div class="p-2">
                 <label for="id">ID</label>
@@ -32,8 +32,21 @@
                 <label for="phoneNumber">Contact Number</label>
                 <input type="text" class="" id="phoneNumber" asp-for="phoneNumber" required maxlength="10">
             </div>
+            <div class="p-2" style="margin-top:15px">
+                <label class="form-check-label" for="inlineRadio3">Upload user Excel file</label> <br />
+                <input type="file" id="uploadFile" name="uploadFile" accept=".xls,.xlsx" asp-for="userExcel">
+                @if (Model != null && !string.IsNullOrEmpty(Model.userExcel))
+                {
+                    <span id="fileNameSpan">@Model.userExcel</span>
+                }
+            </div>
         </div>
         <div class="d-flex flex-row">
+            <div class="p-2">
+                <a href="/User/DownloadFile/?filePath=@Model.userExcel" class="btn btn-primary mx-2">
+                    <i class="bi bi-download"></i>
+                </a>
+            </div>
             <div class="p-2">
                 <label for="Email">Email Address</label><br />
                 <input type="text" class="" id="Email" asp-for="Email" required>
@@ -136,6 +149,16 @@
                 phoneNumberInput.setCustomValidity('Please enter a valid phone number.');
             }
         });
+        function displayFileName() {
+            var fileInput = document.getElementById('uploadFile');
+            var fileNameSpan = document.getElementById('fileNameSpan');
+
+            if (fileInput.files.length > 0) {
+                fileNameSpan.textContent = fileInput.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        }
 
     </script>
 }
