@@ -14,7 +14,11 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<form class="row g-3" method="post" enctype="multipart/form-data">
+@using (Html.BeginForm("Upsert", "User", FormMethod.Post, new
+{ enctype = "multipart/form-data" }))
+{
+    
+<form class="row g-3" method="post" >
     
     <div class="d-flex flex-row">
 
@@ -114,6 +118,7 @@
         </div>
     </div>
 </form>
+}
 
 
 

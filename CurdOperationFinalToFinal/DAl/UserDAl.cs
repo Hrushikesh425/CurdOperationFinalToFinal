@@ -56,11 +56,11 @@ namespace CurdOperationFinalToFinal.DAl
             return userFinal;
         }
 
-        public bool Insert(userData model, List<userAddress> Address)
+        public bool Insert(userData model)
         {
-            string addressListJson = JsonConvert.SerializeObject(Address);
+            //string addressListJson = JsonConvert.SerializeObject(Address);
             int id = 0;
-            string demo = "\\uploadFile\\"+model.uploadFile.FileName;
+            string demo = "\\uploadFile\\" + model.uploadFile.FileName;
             using (con = new SqlConnection(GetConnectionString()))
             {
                 cmd = con.CreateCommand();
@@ -74,7 +74,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@email", model.Email);
                 cmd.Parameters.AddWithValue("genderId", model.Gender);
                 cmd.Parameters.AddWithValue("@userExcel", model.userExcel);
-                cmd.Parameters.AddWithValue("@AddressList", addressListJson);
+                cmd.Parameters.AddWithValue("@AddressList", JsonConvert.SerializeObject(model.AddressList));
 
                 // Set the SQLDbType to NVarChar for the @AddressList parameter
                 cmd.Parameters["@AddressList"].SqlDbType = SqlDbType.NVarChar;
@@ -198,7 +198,7 @@ namespace CurdOperationFinalToFinal.DAl
 
 
         public userData GetById(int id)
-            {
+        {
             List<country> countries = GetCountries();
             try
             {
@@ -206,9 +206,9 @@ namespace CurdOperationFinalToFinal.DAl
 
                 userData employee = new userData()
                 {
-                   
+
                     AddressList = new List<userAddress>(),
-                    
+
                 };
                 using (con = new SqlConnection(GetConnectionString()))
                 {
@@ -222,11 +222,11 @@ namespace CurdOperationFinalToFinal.DAl
                     SqlDataReader dr = cmd.ExecuteReader();
                     while (dr.Read())
                     {
-                        
-                       employee.id = Convert.ToInt32(dr["id"]);
+
+                        employee.id = Convert.ToInt32(dr["id"]);
                         employee.firstName = Convert.ToString(dr["firstName"]);
-                       employee.lastName = Convert.ToString(dr["lastName"]);
-                      employee.Gender = Convert.ToString(dr["GenderId"]);
+                        employee.lastName = Convert.ToString(dr["lastName"]);
+                        employee.Gender = Convert.ToString(dr["GenderId"]);
                         employee.dob = Convert.ToDateTime(dr["dob"]).Date;
                         employee.Email = Convert.ToString(dr["Email"]);
                         employee.phoneNumber = Convert.ToString(dr["phoneNumber"]);
@@ -248,7 +248,7 @@ namespace CurdOperationFinalToFinal.DAl
                         employee.AddressList.Add(add);
                     }
 
-                        // Add the address to the address list
+                    // Add the address to the address list
                     con.Close();
                     return employee;
                 }
@@ -262,9 +262,9 @@ namespace CurdOperationFinalToFinal.DAl
 
 
 
-        public bool Update(userData model, List<userAddress> Address)
+        public bool Update(userData model)
         {
-            string addressListJson = JsonConvert.SerializeObject(Address);
+            /*tring addressListJson = JsonConvert.SerializeObject(Address);*/
             int id = 0;
             using (con = new SqlConnection(GetConnectionString()))
             {
@@ -280,7 +280,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@email", model.Email);
                 cmd.Parameters.AddWithValue("genderId", model.Gender);
                 cmd.Parameters.AddWithValue("userExcel", model.userExcel);
-                cmd.Parameters.AddWithValue("@AddressesJson", addressListJson);
+                cmd.Parameters.AddWithValue("@AddressesJson", JsonConvert.SerializeObject(model.AddressList));
                 con.Open();
 
                 id = cmd.ExecuteNonQuery();
@@ -290,7 +290,7 @@ namespace CurdOperationFinalToFinal.DAl
         }
 
 
-        public bool UpdateAll(userData model, List<userAddress> AddressList)
+        public bool UpdateAll(userData model)
         {
             int id = 0;
             using (con = new SqlConnection(GetConnectionString()))
@@ -307,7 +307,7 @@ namespace CurdOperationFinalToFinal.DAl
                 cmd.Parameters.AddWithValue("@phoneNumber", model.phoneNumber);
                 cmd.Parameters.AddWithValue("@isActive", model.isActive);
                 cmd.Parameters.AddWithValue("userExcel", model.userExcel);
-                cmd.Parameters.AddWithValue("@AddressesJson", JsonConvert.SerializeObject(AddressList));
+                cmd.Parameters.AddWithValue("@AddressesJson", JsonConvert.SerializeObject(model.AddressList));
 
                 con.Open();
                 id = cmd.ExecuteNonQuery();

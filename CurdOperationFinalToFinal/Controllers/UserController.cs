@@ -9,8 +9,8 @@ using System.Net;
 namespace CurdOperationFinalToFinal.Controllers
 {
     public class UserController : Controller
-	{
-		private readonly UserDAl _dal;
+    {
+        private readonly UserDAl _dal;
         public UserController(UserDAl dal)
         {
             _dal = dal;
@@ -28,64 +28,65 @@ namespace CurdOperationFinalToFinal.Controllers
             }
             return View(employees);
         }
-		public IActionResult GetStatesByCountry(int countryId)
-		{
-			List<state> states = _dal.GetStatesByCountry(countryId);
-			return Json(states);
-		}
-
-		[HttpGet]
-		public IActionResult Create()
-		{
-            //List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
-            userData employee = new userData();
-            return View(employee);
-
-
+        public IActionResult GetStatesByCountry(int countryId)
+        {
+            List<state> states = _dal.GetStatesByCountry(countryId);
+            return Json(states);
         }
-		private gender model = new gender();
 
-        [HttpPost]
-		public IActionResult Create(userData data, List<userAddress> Address)
-		{
-            var fileExtension = Path.GetExtension(data.uploadFile.FileName).ToLower();
-            if(fileExtension == ".xls" || fileExtension == ".xlsx")
-            {
-
-            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "C:\\uploaded_file");
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + data.uploadFile.FileName;
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                data.uploadFile.CopyTo(fileStream);
-            }
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    //List<AddressType> addressTypes = _employeeDAL.GetAddressTypes();
+        //    userData employee = new userData();
+        //    return View(employee);
 
 
-            data.userExcel = filePath;  
+        //}
+        //private gender model = new gender();
 
-            bool result = _dal.Insert(data,Address);
-			TempData["successMessage"] = "User Details Saved";
-			return RedirectToAction("Index");
-			
-            }else
-            {
-                TempData["errorMessage"] = "file extension is invalid";
-                return RedirectToAction("Index");
-            }
-            
+        //[HttpPost]
+        //public IActionResult Create(userData data, List<userAddress> Address)
+        //{
+        //    var fileExtension = Path.GetExtension(data.uploadFile.FileName).ToLower();
+        //    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+        //    {
 
-            
-		}
+        //        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "C:\\uploaded_file");
+        //        string uniqueFileName = Guid.NewGuid().ToString() + "_" + data.uploadFile.FileName;
+        //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            data.uploadFile.CopyTo(fileStream);
+        //        }
+
+
+        //        data.userExcel = filePath;
+
+        //        bool result = _dal.Insert(data, Address);
+        //        TempData["successMessage"] = "User Details Saved";
+        //        return RedirectToAction("Index");
+
+        //    }
+        //    else
+        //    {
+        //        TempData["errorMessage"] = "file extension is invalid";
+        //        return RedirectToAction("Index");
+        //    }
+
+
+
+        //}
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            
+
             userData employee = new userData();
             try
             {
-                   employee = _dal.GetById(id);
+                employee = _dal.GetById(id);
                 List<country> countries = _dal.GetCountries();
                 foreach (var item in employee.AddressList)
                 {
@@ -114,7 +115,7 @@ namespace CurdOperationFinalToFinal.Controllers
         public IActionResult Upsert(int id)
         {
             userData employee = new userData();
-            if(id == 0)
+            if (id == 0)
             {
                 return View(employee);
             }
@@ -147,9 +148,9 @@ namespace CurdOperationFinalToFinal.Controllers
 
         [HttpPost]
 
-        public IActionResult Upsert(userData employee, List<userAddress> addressList)
+        public IActionResult Upsert(userData employee)
         {
-            if(employee.id == 0)
+            if (employee.id == 0)
             {
                 var fileExtension = Path.GetExtension(employee.uploadFile.FileName).ToLower();
                 if (fileExtension == ".xls" || fileExtension == ".xlsx")
@@ -167,7 +168,7 @@ namespace CurdOperationFinalToFinal.Controllers
 
                     employee.userExcel = filePath;
 
-                    bool result = _dal.Insert(employee, addressList);
+                    bool result = _dal.Insert(employee);
                     TempData["successMessage"] = "User Details Saved";
                     return RedirectToAction("Index");
 
@@ -208,7 +209,7 @@ namespace CurdOperationFinalToFinal.Controllers
 
                         // Save the new file
                         using (var fileStream = new FileStream(newFilePath, FileMode.Create))
-                        {   
+                        {
                             files[0].CopyTo(fileStream);
                         }
 
@@ -218,7 +219,7 @@ namespace CurdOperationFinalToFinal.Controllers
                     {
                         employee.userExcel = oldImage;
                     }
-                    bool result = _dal.UpdateAll(employee, addressList);
+                    bool result = _dal.UpdateAll(employee);
 
                     if (!result)
                     {
@@ -238,7 +239,7 @@ namespace CurdOperationFinalToFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(userData employee, List<userAddress> addressList)
+        public IActionResult Edit(userData employee)
         {
             try
             {
@@ -251,7 +252,7 @@ namespace CurdOperationFinalToFinal.Controllers
                 var files = HttpContext.Request.Form.Files;
                 string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "C:\\uploaded_file");
                 string oldImage = _dal.GetImage(employee.id);
-                bool result = _dal.UpdateAll(employee, addressList);
+                bool result = _dal.UpdateAll(employee);
 
                 if (files.Count > 0)
                 {
@@ -298,7 +299,7 @@ namespace CurdOperationFinalToFinal.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-           
+
             try
             {
 
@@ -325,7 +326,7 @@ namespace CurdOperationFinalToFinal.Controllers
             try
             {
                 bool result = _dal.Delete(data.id);
-                
+
 
                 if (!result)
                 {
@@ -365,8 +366,8 @@ namespace CurdOperationFinalToFinal.Controllers
 
             userAddress employeeVM = new userAddress
             {
-                
-                
+
+
                 countries = countries,
             };
 
