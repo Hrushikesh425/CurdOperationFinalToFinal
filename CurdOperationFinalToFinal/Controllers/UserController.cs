@@ -150,8 +150,10 @@ namespace CurdOperationFinalToFinal.Controllers
 
         public IActionResult Upsert(userData employee)
         {
+            
             if (employee.id == 0)
             {
+                //employee.AddressList = new List<userAddress>();
                 var fileExtension = Path.GetExtension(employee.uploadFile.FileName).ToLower();
                 if (fileExtension == ".xls" || fileExtension == ".xlsx")
                 {

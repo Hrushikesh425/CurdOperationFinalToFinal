@@ -1,4 +1,6 @@
-﻿@model userData
+﻿@using Microsoft.AspNetCore.Mvc.Rendering;
+@using HtmlHelpers.BeginCollectionItemCore;
+@model userData
 
 
 @{
@@ -14,6 +16,7 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
 @using (Html.BeginForm("Upsert", "User", FormMethod.Post, new
 { enctype = "multipart/form-data" }))
 {
@@ -34,7 +37,7 @@
 
         <div class="p-2">
             <label for="datepicker">Birth Date</label>
-            <input id="datepicker" type="date" class="" asp-for="dob" required />
+                <input id="datepicker" type="date" class="" asp-for="dob" value="@DateTime.Now.ToString("dd-MM-yyyy")" required />
             <span class="text-danger"></span>
         </div>
 
@@ -119,6 +122,7 @@
     </div>
 </form>
 }
+
 
 
 
